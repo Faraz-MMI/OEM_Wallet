@@ -1,0 +1,21 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "src/assets/fonts/Arimo-Bold.ttf",
+      "sha1": "921ac8bea808cb2fe56d373b4c9f17099cb96302"
+    },
+    {
+      "path": "src/assets/fonts/Arimo-Medium.ttf",
+      "sha1": "0c9a40b3ae27221aa9623328cfdced11c8330a87"
+    },
+    {
+      "path": "src/assets/fonts/Arimo-Regular.ttf",
+      "sha1": "e50a6106cc613ec2bc21ced3f4a7d659e12a6316"
+    },
+    {
+      "path": "src/assets/fonts/Arimo-SemiBold.ttf",
+      "sha1": "a018ea3676ea871315c8bc13a2bc000f0320b1f9"
+    }
+  ]
+}

@@ -1,0 +1,159 @@
+import React, { useRef, useState } from 'react';
+import {
+    View,
+    StyleSheet,
+    TouchableOpacity,
+    TextInput,
+} from 'react-native';
+import AppText from '../../ui/components/AppText';
+import { vw, vh } from '../../ui/theme/dimensions';
+import { Fonts } from '../../ui/theme/fonts';
+import { COLORS } from '../../app/constants/colors';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { Routes } from '../../app/constants/routes';
+import { useAuthStore } from '../../app/store/authStore';
+import { useFetchCustomer } from './hooks/useFetchCustomer';
+import { useUserStore } from '../../app/store/userStore';
+import CustomLoader from '../../ui/components/CustomLoader';
+type Props = NativeStackScreenProps<any>;
+export default function SetWalletPinScreen({ navigation }: Props) {
+    const { setMobile, hasPassword, setHasPassword } = useAuthStore();
+    const { fetchCustomerAsync, data, isLoading, error } = useFetchCustomer();
+    const [pin, setPin] = useState('');
+    const inputRef = useRef<TextInput>(null);
+
+    const onChangePin = (value: string) => {
+        if (/^\d*$/.test(value) && value.length <= 4) {
+            setPin(value);
+        }
+    };
+
+    const isValid = pin.length === 4;
+
+    const onConfirmPin = async () => {
+        const response = await fetchCustomerAsync({
+            mobile: { countryCode: 91, value: '9998427343' }
+        });
+        console.log("fetchCustomer wallet screen", response);
+        useUserStore.getState().setUser(response);
+        useAuthStore.getState().setHasPassword(true);
+        // navigation.replace(Routes.DASHBOARD);
+    }
+
+    return (
+        <View style={styles.container}>
+            
+            <AppText style={styles.title}>Set Wallet PIN</AppText>
+            <AppText style={styles.subtitle}>
+                This PIN will be used for payments
+            </AppText>
+
+            
+            <TouchableOpacity
+                activeOpacity={1}
+                style={styles.pinRow}
+                onPress={() => inputRef.current?.focus()}
+            >
+                {[0, 1, 2, 3].map(i => (
+                    <View key={i} style={styles.pinBox}>
+                        <AppText style={styles.pinDot}>
+                            {pin[i] ? '•' : ''}
+                        </AppText>
+                    </View>
+                ))}
+            </TouchableOpacity>
+
+            
+            <TextInput
+                ref={inputRef}
+                value={pin}
+                onChangeText={onChangePin}
+                keyboardType="number-pad"
+                maxLength={4}
+                autoFocus
+                style={styles.hiddenInput}
+            />
+
+            
+            <TouchableOpacity
+                disabled={!isValid}
+                style={[
+                    styles.cta,
+                    !isValid && styles.ctaDisabled,
+                ]}
+                onPress={onConfirmPin}
+            >
+                <AppText style={styles.ctaText}>
+                    Confirm PIN
+                </AppText>
+            </TouchableOpacity>
+            <CustomLoader visible={isLoading} />
+        </View>
+    );
+}
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#FFFFFF',
+        paddingHorizontal: vw(6),
+        paddingTop: vh(6),
+    },
+
+    title: {
+        fontSize: vw(6),
+        fontFamily: Fonts.bold,
+        color: '#0F172A',
+    },
+
+    subtitle: {
+        marginTop: vh(1),
+        fontSize: vw(3.6),
+        color: '#64748B',
+    },
+
+    pinRow: {
+        marginTop: vh(6),
+        flexDirection: 'row',
+        justifyContent: 'center',
+    },
+
+    pinBox: {
+        width: vw(12),
+        height: vw(12),
+        borderRadius: 12,
+        backgroundColor: '#F3F4F6',
+        marginHorizontal: vw(2),
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+
+    pinDot: {
+        fontSize: vw(6),
+        fontFamily: Fonts.bold,
+    },
+
+    hiddenInput: {
+        position: 'absolute',
+        opacity: 0,
+    },
+
+    cta: {
+        marginTop: vh(6),
+        height: vh(7),
+        backgroundColor: COLORS.BUTTON_SELECTED,
+        borderRadius: 14,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+
+    ctaDisabled: {
+        opacity: 0.5,
+    },
+
+    ctaText: {
+        color: '#FFFFFF',
+        fontSize: vw(4),
+        fontFamily: Fonts.semiBold,
+    },
+});
