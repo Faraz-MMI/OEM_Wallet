@@ -38,13 +38,13 @@ export default function BuyNewFastTagScreen() {
                 {/* Vehicle Number */}
                 <Field
                     label="Vehicle Registration Number *"
-                    placeholder="MH12AB1234"
+                    placeholder="DL 20 FRZ 0899"
                 />
 
                 {/* RC Number */}
                 <Field
                     label="RC Number *"
-                    placeholder="MH12AB123456789"
+                    placeholder="DL 20 FRZ 0899"
                     helper="Registration Certificate number from your vehicle documents"
                 />
 

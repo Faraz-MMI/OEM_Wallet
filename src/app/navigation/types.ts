@@ -2,6 +2,25 @@ import { NavigatorScreenParams } from "@react-navigation/native";
 import { Routes } from "../constants/routes";
 import { VoucherBrand } from "../../features/voucher/types";
 
+
+export type AuthStackParamList = {
+  [Routes.LOGIN]: undefined;
+  [Routes.ONBOARDING]: undefined;
+  [Routes.SET_PASSWORD]: {
+    mobile: string;
+    first_name:string;
+    last_name:string;
+    email_id:string;
+  };
+  [Routes.VERIFY_OTP]: {
+  };
+  [Routes.CREATE_ACCOUNT]: undefined;
+  [Routes.SET_USER_NAME]: {
+    mobile: string;
+  };
+  [Routes.SET_PIN]: undefined;
+}
+
 export type MainStack = {
   [Routes.DASHBOARD]: undefined;
   [Routes.RFID_CARD]: undefined;
@@ -20,6 +39,7 @@ export type MainStack = {
   [Routes.TRANSACTION_DETAILS]: {
     transactionId: string;
   };
+  [Routes.CHALLAN_STACK]: NavigatorScreenParams<ChallanStackParamList>;
 };
 
 export type FastTagStackParamList = {
@@ -70,4 +90,11 @@ export type ProfileStackParamList = {
   [Routes.PROFILE_WALLET_PIN]: undefined;
   [Routes.PROFILE_HELP]: undefined;
   [Routes.PROFILE_CUSTOMER_LOOKUP]: undefined;
+};
+
+export type ChallanStackParamList = {
+  [Routes.TRAFFIC_CHALLAN]: undefined;
+  [Routes.CHALLAN_DETAILS]: undefined;
+  [Routes.CONFIRM_CHALLAN_PAYMENT]: undefined;
+  [Routes.CHALLAN_PAYMENT_SUCCESS]: undefined;
 };

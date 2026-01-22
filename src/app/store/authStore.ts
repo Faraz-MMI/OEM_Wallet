@@ -7,8 +7,10 @@ type AuthState = {
   setMobile: (mobile: string) => void;
   setHasPassword: (value: boolean) => void;
   markPasswordSet: () => void;
-  token: string;
-  clearLogin: () => void;
+  token: string | null;
+  setToken: (token: string) => void;
+  clearToken: () => void;
+  logout: () => void;
 };
 
 export const useAuthStore = create<AuthState>(set => ({
@@ -21,8 +23,10 @@ export const useAuthStore = create<AuthState>(set => ({
     set({ hasPassword: value })
   },
   markPasswordSet: () => set({ hasPassword: true }),
-  clearLogin: async () => {
+  logout: async () => {
     await AsyncStorage.removeItem('HAS_PASSWORD');
-    set({ hasPassword: false, mobile: "" });
+    set({ hasPassword: false, mobile: "",token: null });
   },
+  setToken: token => set({ token }),
+  clearToken: () => set({ token: null }),
 }));

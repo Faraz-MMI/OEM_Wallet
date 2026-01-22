@@ -15,12 +15,16 @@ import { useAuthStore } from '../../app/store/authStore';
 import { useFetchCustomer } from './hooks/useFetchCustomer';
 import { useUserStore } from '../../app/store/userStore';
 import CustomLoader from '../../ui/components/CustomLoader';
+import { md5 } from '../../app/services/encryption';
+import { useSetMpin } from './hooks/useSetMpin';
+import ScreenContainer from '../../ui/components/ScreenContainer';
 type Props = NativeStackScreenProps<any>;
 export default function SetWalletPinScreen({ navigation }: Props) {
     const { setMobile, hasPassword, setHasPassword } = useAuthStore();
     const { fetchCustomerAsync, data, isLoading, error } = useFetchCustomer();
     const [pin, setPin] = useState('');
     const inputRef = useRef<TextInput>(null);
+    const { setMpin, loading, error: setMpinError } = useSetMpin();
 
     const onChangePin = (value: string) => {
         if (/^\d*$/.test(value) && value.length <= 4) {
@@ -31,64 +35,75 @@ export default function SetWalletPinScreen({ navigation }: Props) {
     const isValid = pin.length === 4;
 
     const onConfirmPin = async () => {
+        const success = await setMpin({
+            mPin: md5(pin),
+            confPin: md5(pin),
+        });
+
+        if (success) {
+            console.log('MPIN set successfully');
+        }
+
         const response = await fetchCustomerAsync({
             mobile: { countryCode: 91, value: '9998427343' }
         });
         console.log("fetchCustomer wallet screen", response);
         useUserStore.getState().setUser(response);
         useAuthStore.getState().setHasPassword(true);
-        // navigation.replace(Routes.DASHBOARD);
     }
 
     return (
-        <View style={styles.container}>
-            
-            <AppText style={styles.title}>Set Wallet PIN</AppText>
-            <AppText style={styles.subtitle}>
-                This PIN will be used for payments
-            </AppText>
+        <ScreenContainer>
+            <View style={styles.container}>
 
-            
-            <TouchableOpacity
-                activeOpacity={1}
-                style={styles.pinRow}
-                onPress={() => inputRef.current?.focus()}
-            >
-                {[0, 1, 2, 3].map(i => (
-                    <View key={i} style={styles.pinBox}>
-                        <AppText style={styles.pinDot}>
-                            {pin[i] ? '•' : ''}
-                        </AppText>
-                    </View>
-                ))}
-            </TouchableOpacity>
-
-            
-            <TextInput
-                ref={inputRef}
-                value={pin}
-                onChangeText={onChangePin}
-                keyboardType="number-pad"
-                maxLength={4}
-                autoFocus
-                style={styles.hiddenInput}
-            />
-
-            
-            <TouchableOpacity
-                disabled={!isValid}
-                style={[
-                    styles.cta,
-                    !isValid && styles.ctaDisabled,
-                ]}
-                onPress={onConfirmPin}
-            >
-                <AppText style={styles.ctaText}>
-                    Confirm PIN
+                <AppText style={styles.title}>Set Wallet PIN</AppText>
+                <AppText style={styles.subtitle}>
+                    This PIN will be used for payments
                 </AppText>
-            </TouchableOpacity>
-            <CustomLoader visible={isLoading} />
-        </View>
+
+
+                <TouchableOpacity
+                    activeOpacity={1}
+                    style={styles.pinRow}
+                    onPress={() => inputRef.current?.focus()}
+                >
+                    {[0, 1, 2, 3].map(i => (
+                        <View key={i} style={styles.pinBox}>
+                            <AppText style={styles.pinDot}>
+                                {pin[i] ? '•' : ''}
+                            </AppText>
+                        </View>
+                    ))}
+                </TouchableOpacity>
+
+
+                <TextInput
+                    ref={inputRef}
+                    value={pin}
+                    onChangeText={onChangePin}
+                    keyboardType="number-pad"
+                    maxLength={4}
+                    autoFocus
+                    style={styles.hiddenInput}
+                />
+
+
+                <TouchableOpacity
+                    disabled={!isValid}
+                    style={[
+                        styles.cta,
+                        !isValid && styles.ctaDisabled,
+                    ]}
+                    onPress={onConfirmPin}
+                >
+                    <AppText style={styles.ctaText}>
+                        Confirm PIN
+                    </AppText>
+                </TouchableOpacity>
+               
+            </View>
+             <CustomLoader visible={isLoading || loading} />
+        </ScreenContainer>
     );
 }
 
@@ -116,6 +131,7 @@ const styles = StyleSheet.create({
         marginTop: vh(6),
         flexDirection: 'row',
         justifyContent: 'center',
+        zIndex:1
     },
 
     pinBox: {

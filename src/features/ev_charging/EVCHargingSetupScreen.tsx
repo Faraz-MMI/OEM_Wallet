@@ -42,8 +42,8 @@ export default function EVChargingSetupScreen() {
                         <Text style={styles.cardTitle}>Registration Details</Text>
 
                         <InfoRow label="Name" value="Faraz" />
-                        <InfoRow label="Mobile" value="+91 98xxxxxx45" />
-                        <InfoRow label="Email" value="faraz@email.com" />
+                        <InfoRow label="Mobile" value="+91 99xxxxxx64" />
+                        <InfoRow label="Email" value="faraz.khan@mapmyindia.com" />
                     </View>
 
                     {/* Benefits */}

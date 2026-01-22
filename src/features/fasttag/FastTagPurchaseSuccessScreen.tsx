@@ -50,7 +50,7 @@ export default function FastTagPurchaseSuccessScreen() {
 
                         <View style={styles.vehicleBox}>
                             <Text style={styles.vehicleLabel}>Vehicle Number</Text>
-                            <Text style={styles.vehicleNumber}>MH12AAB345</Text>
+                            <Text style={styles.vehicleNumber}>DL 20 FRZ 0899</Text>
                         </View>
                     </LinearGradient>
 

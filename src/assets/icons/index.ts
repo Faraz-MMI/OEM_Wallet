@@ -24,6 +24,8 @@ import ICON_TIME from './icon_timer.svg';
 import ICON_TAG from './icon_tag.svg';
 import ICON_NOTES from './icon_notes.svg';
 import ICON_PLUS from './icon_plus.svg';
+import ICON_EYE from './eye.svg';
+import ICON_EYE_OFF from './eye_off.svg';
 
 
 export {
@@ -52,5 +54,7 @@ export {
     ICON_TIME,
     ICON_TAG,
     ICON_NOTES,
-    ICON_PLUS
+    ICON_PLUS,
+    ICON_EYE,
+    ICON_EYE_OFF
 };

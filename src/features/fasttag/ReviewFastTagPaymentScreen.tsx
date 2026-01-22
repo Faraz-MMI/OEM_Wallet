@@ -25,7 +25,7 @@ export default function ReviewPaymentScreen() {
             <View style={styles.container}>
                 
                 <View style={styles.card}>
-                    <InfoRow label="Vehicle Number" value="MH12AB1234" />
+                    <InfoRow label="Vehicle Number" value="DL 20 FRZ 0899" />
 
                     <InfoRow label="CA Number" value="**** 3024" />
 

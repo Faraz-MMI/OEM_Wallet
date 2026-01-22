@@ -12,19 +12,20 @@ import { Fonts } from '../../ui/theme/fonts';
 import ScreenContainer from '../../ui/components/ScreenContainer';
 import CustomTopBar from '../../ui/components/CustomTopBar';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { ICON_BOTTOM_ANGLE_ARROW } from '../../assets/icons';
 
 const FAQS = [
-  { q: 'How do I add money to my wallet?', tag: 'Wallet usage' },
-  { q: 'What is the minimum wallet balance required?', tag: 'Wallet usage' },
-  { q: 'How do I recharge my FastTag?', tag: 'Fastag recharge' },
-  { q: 'Can I get a refund for unused FastTag balance?', tag: 'Fastag recharge' },
-  { q: 'How do I purchase vouchers?', tag: 'Voucher purchases' },
-  { q: 'Where can I view my purchased vouchers?', tag: 'Voucher purchases' },
-  { q: 'What should I do if my payment fails?', tag: 'Payment failures' },
-  { q: 'Why was my transaction declined?', tag: 'Payment failures' },
+  { q: 'How do I add money to my wallet?', tag: 'Wallet usage', instructions: 'Go to Home > Add Money, select your preferred payment method (UPI, Card, Net Banking), enter the amount, and complete the payment. Money will be credited instantly.' },
+  { q: 'What is the minimum wallet balance required?', tag: 'Wallet usage', instructions: 'There is no minimum balance requirement. You can maintain any balance in your wallet and add money whenever needed.' },
+  { q: 'How do I recharge my FastTag?', tag: 'Fastag recharge', instructions: 'Navigate to FastTag section from home, click "Recharge", enter the amount (minimum ₹100), and confirm payment. The FastTag will be recharged immediately.' },
+  { q: 'Can I get a refund for unused FastTag balance?', tag: 'Fastag recharge', instructions: 'Yes, you can request a FastTag refund. Go to FastTag > Refund, enter the amount you want to refund (will be credited to wallet), and submit your request.' },
+  { q: 'How do I purchase vouchers?', tag: 'Voucher purchases', instructions: 'Go to Vouchers section, browse available offers, select the voucher you want, enter the amount or quantity, and complete the purchase using your wallet balance.' },
+  { q: 'Where can I view my purchased vouchers?', tag: 'Voucher purchases', instructions: 'All your purchased vouchers are available in Vouchers > My Vouchers section. You can view details, redemption codes, and validity dates there.' },
+  { q: 'What should I do if my payment fails?', tag: 'Payment failures', instructions: 'If a payment fails, the amount will be automatically refunded to your original payment source within 5-7 business days. Check your transaction history for status updates.' },
+  { q: 'Why was my transaction declined?', tag: 'Payment failures', instructions: 'Transactions can be declined due to insufficient balance, bank issues, or technical errors. Please check your wallet balance and try again. Contact support if the issue persists.' },
 ];
-type Props=NativeStackScreenProps<any>;
-export default function HelpSupportScreen({navigation}:Props) {
+type Props = NativeStackScreenProps<any>;
+export default function HelpSupportScreen({ navigation }: Props) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
@@ -32,7 +33,7 @@ export default function HelpSupportScreen({navigation}:Props) {
       <CustomTopBar title='Help & Support' onBack={() => navigation.goBack()} />
 
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-        
+
         <LinearGradient
           colors={['#2563EB', '#005ABF']}
           style={styles.hero}
@@ -53,15 +54,15 @@ export default function HelpSupportScreen({navigation}:Props) {
           </View>
         </LinearGradient>
 
-        
+
         <View style={styles.card}>
           <AppText style={styles.cardTitle}>Contact Support</AppText>
 
-          <InfoRow label="Email" value="support@walletapp.com" color="#2563EB" />
-          <InfoRow label="Phone" value="+91 XXXXXXXXXX" color="#16A34A" />
+          <InfoRow label="Email" value="frz.support@walletapp.com" color="#2563EB" />
+          <InfoRow label="Phone" value="+91 9940368464" color="#16A34A" />
         </View>
 
-        
+
         <AppText style={styles.sectionTitle}>Frequently Asked Questions</AppText>
 
         <View style={styles.chipsRow}>
@@ -81,7 +82,7 @@ export default function HelpSupportScreen({navigation}:Props) {
           />
         ))}
 
-        
+
         <View style={styles.footer}>
           <AppText style={styles.footerText}>
             🕒 Our customer support team is available Monday to Saturday,
@@ -133,7 +134,7 @@ function FAQItem({
   open,
   onPress,
 }: {
-  item: { q: string; tag: string };
+  item: { q: string; tag: string, instructions: string };
   open: boolean;
   onPress: () => void;
 }) {
@@ -141,9 +142,15 @@ function FAQItem({
     <TouchableOpacity style={styles.faqItem} onPress={onPress}>
       <View style={styles.faqHeader}>
         <AppText style={styles.faqQ}>{item.q}</AppText>
-        <AppText>{open ? '▲' : '▼'}</AppText>
+        {/* <AppText>{open ? '▲' : '▼'}</AppText> */}
+        {open ? <ICON_BOTTOM_ANGLE_ARROW style={{ transform: [{ scaleY: -1 }] }} /> : <ICON_BOTTOM_ANGLE_ARROW />}
       </View>
       <AppText style={styles.faqTag}>{item.tag}</AppText>
+      {open && (
+        <AppText style={{ marginTop: vh(1.5), color: '#374151' }}>
+          {item.instructions}
+        </AppText>
+      )}
     </TouchableOpacity>
   );
 }

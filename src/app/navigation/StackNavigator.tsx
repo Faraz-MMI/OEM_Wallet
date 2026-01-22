@@ -15,6 +15,7 @@ import NotificationsScreen from '../../features/notifications/NotificationsScree
 import ProfileStackNavigator from './ProfileStackNavigator';
 import TransactionsScreen from '../../features/transactions/TransactionsScreen';
 import TransactionDetailsScreen from '../../features/transactions/TransactionDetailsScreen';
+import ChallanStackNavigator from './ChallanStackNavigator';
 
 const Stack = createNativeStackNavigator<MainStack>();
 
@@ -32,6 +33,7 @@ export default function StackNavigator() {
       <Stack.Screen name={Routes.PROFILE_STACK} component={ProfileStackNavigator}/>
       <Stack.Screen name={Routes.HOME_VIEW_ALL_TRANSACTIONS} component={TransactionsScreen}/>
       <Stack.Screen name={Routes.TRANSACTION_DETAILS} component={TransactionDetailsScreen}/>
+      <Stack.Screen name={Routes.CHALLAN_STACK} component={ChallanStackNavigator} />
     </Stack.Navigator>
   );
 }

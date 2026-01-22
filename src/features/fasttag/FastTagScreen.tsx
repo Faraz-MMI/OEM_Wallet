@@ -32,7 +32,7 @@ export default function FastTagScreen() {
         {/* MAIN FASTTAG SUMMARY */}
         <View style={styles.summaryCard}>
           <Text style={styles.label}>Vehicle Number</Text>
-          <Text style={styles.value}>MH12AB1234</Text>
+          <Text style={styles.value}>DL 20 FRZ 0899</Text>
 
           <Text style={[styles.label, { marginTop: vh(2) }]}>Tag ID</Text>
           <Text style={styles.value}>**** **** 7821</Text>
@@ -71,7 +71,7 @@ export default function FastTagScreen() {
 
         <FastTagCard
           bank="IDFC First Bank"
-          vehicle="MH12AB1234"
+          vehicle="DL 20 FRZ 0899"
           tagId="XXXX7821"
           status="Active"
           showRecharge
@@ -79,7 +79,7 @@ export default function FastTagScreen() {
 
         <FastTagCard
           bank="ICICI Bank"
-          vehicle="MH12AAB345"
+          vehicle="DL 20 FRZ 0899"
           tagId="XXXX2913"
           status="Order Placed"
         />

@@ -6,8 +6,11 @@ import SetPasswordScreen from '../../features/set_password/SetPasswordScreen';
 import VerifyOtpScreen from '../../features/otp/VerifyOtpScreen';
 import SetWalletPinScreen from '../../features/onboarding/SetWalletPinScreen';
 import LoginScreen from '../../features/onboarding/LoginScreen';
+import RegisterScreen from '../../features/onboarding/RegisterScreen';
+import { AuthStackParamList } from './types';
+import SetNameScreen from '../../features/onboarding/SetNameScreen';
 
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator<AuthStackParamList>();
 
 export default function AuthStack() {
   return (
@@ -17,6 +20,8 @@ export default function AuthStack() {
       <Stack.Screen name={Routes.SET_PASSWORD} component={SetPasswordScreen} />
       <Stack.Screen name={Routes.VERIFY_OTP} component={VerifyOtpScreen} />
       <Stack.Screen name={Routes.SET_PIN} component={SetWalletPinScreen} />
+      <Stack.Screen name={Routes.CREATE_ACCOUNT} component={RegisterScreen} />
+      <Stack.Screen name={Routes.SET_USER_NAME} component={SetNameScreen} />
     </Stack.Navigator>
   );
 }

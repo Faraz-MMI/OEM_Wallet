@@ -40,7 +40,7 @@ export default function FastTagFoundScreen({ navigation }: any) {
 
                         <View style={styles.vehicleBox}>
                             <Text style={styles.vehicleLabel}>Vehicle Number</Text>
-                            <Text style={styles.vehicleValue}>MH12AB1234</Text>
+                            <Text style={styles.vehicleValue}>DL 20 FRZ 0899</Text>
                         </View>
                     </View>
 
@@ -49,7 +49,7 @@ export default function FastTagFoundScreen({ navigation }: any) {
                         <Text style={styles.infoTitle}>FastTag Information</Text>
 
                         <InfoRow label="Tag ID" value="XXXX7821" />
-                        <InfoRow label="Vehicle Number" value="MH12AB1234" />
+                        <InfoRow label="Vehicle Number" value="DL 20 FRZ 0899" />
                         <InfoRow
                             label="Status"
                             value="ACTIVE"

@@ -25,12 +25,15 @@ import { usePrimaryCard, useUserProfile } from '../../app/store/selectors';
 import { useUserStore } from '../../app/store/userStore';
 import { startPaytmTransaction } from '../../app/services/paytm.service';
 import TopBarBranding from '../../ui/components/TopBarBranding';
+import { useGetProfile } from '../onboarding/hooks/useGetProfile';
+import { UserProfile } from '../onboarding/types/profile.types';
 
 type NavigationProp = NativeStackNavigationProp<MainStack>;
 export default function DashboardScreen() {
   const navigation = useNavigation<NavigationProp>();
-  
-  const { profile, entityId, selectedBrand } = useUserStore();
+  const { getProfile, loading, error } = useGetProfile();
+ 
+  const { profile, entityId, selectedBrand,userProfile,setUserProfile } = useUserStore();
   const account =
     profile != null && profile.accounts != null && profile.accounts.length > 0 ? profile.accounts[0] : null;
 
@@ -45,6 +48,9 @@ export default function DashboardScreen() {
       mobile: { countryCode: 91, value: '9258809888' },
       kit: '20003255',
       entityId: '630863194610000193240825',
+    });
+    getProfile().then((data) => {
+      setUserProfile(data!);
     });
   }, [profile]);
 
@@ -67,7 +73,7 @@ export default function DashboardScreen() {
             <TopBarBranding brand={selectedBrand} />
             <View style={{ flexShrink: 1, }}>
               <AppText style={styles.welcome}>Welcome back</AppText>
-              <AppText style={styles.userName} numberOfLines={2}>{`${profile?.firstName} ${profile?.lastName}`}</AppText>
+              <AppText style={styles.userName} numberOfLines={2}>{userProfile ? `${userProfile?.fname} ${userProfile?.lname}` : ''}</AppText>
             </View>
           </View>
 
@@ -106,7 +112,7 @@ export default function DashboardScreen() {
             </View>
 
             <AppText style={styles.cardVehicle}>
-              MH12AB1234
+              DL 20 FRZ 0899
             </AppText>
           </TouchableOpacity>
         </LinearGradient>
@@ -114,7 +120,7 @@ export default function DashboardScreen() {
         <View style={styles.balanceRow}>
           <View>
             <AppText style={styles.balanceLabel}>Wallet Balance</AppText>
-            <AppText style={styles.balanceAmount}>₹ {walletDetails != null ? walletDetails.accountBalance : "-"}</AppText>
+            <AppText style={styles.balanceAmount}>₹ {userProfile ? userProfile.walletBal : "-"}</AppText>
           </View>
 
           <TouchableOpacity style={styles.addMoneyBtn} onPress={() => navigation.navigate(Routes.ADD_MONEY)}>
@@ -295,7 +301,7 @@ const styles = StyleSheet.create({
     marginVertical: vh(0.2),
   },
 
- 
+
   balanceRow: {
     marginTop: vh(3),
     flexDirection: 'row',
@@ -383,7 +389,7 @@ const styles = StyleSheet.create({
   voucherTitle: {
     fontSize: FONT_SIZE.FONT_14,
     fontFamily: Fonts.bold,
-    color:"#101828"
+    color: "#101828"
   },
 
   voucherSub: {

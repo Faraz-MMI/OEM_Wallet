@@ -10,6 +10,8 @@ import { vw, vh, FONT_SIZE } from '../../ui/theme/dimensions';
 import { Fonts } from '../../ui/theme/fonts';
 import { COLORS } from '../../app/constants/colors';
 import CustomTopBar from '../../ui/components/CustomTopBar';
+import { ICON_CALENDAR } from '../../assets/icons';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 const DATA = [
   {
@@ -23,29 +25,30 @@ const DATA = [
     id: '2',
     title: 'First Free Service',
     subtitle: 'Basic check-up & software update',
-    date: '18 Dec 2023',
+    date: '18 Dec 2025',
     km: '1,000 km',
   },
   {
     id: '3',
     title: 'Wheel Alignment',
     subtitle: 'Wheel balancing & alignment',
-    date: '05 Oct 2023',
+    date: '05 Oct 2025',
     km: '750 km',
   },
   {
     id: '4',
     title: 'Pre-delivery Inspection',
     subtitle: 'Initial vehicle inspection',
-    date: '20 Aug 2023',
+    date: '20 Aug 2025',
     km: '50 km',
   },
 ];
 
-export default function ServiceHistoryScreen() {
+type Props = NativeStackScreenProps<any>;
+export default function ServiceHistoryScreen({ navigation }: Props) {
   return (
     <ScreenContainer>
-        <CustomTopBar title='Service History' onBack={() => {}} />
+        <CustomTopBar title='Service History' onBack={() => navigation.goBack()} />
       <View style={styles.container}>
         <FlatList
           data={DATA}
@@ -80,7 +83,8 @@ function ServiceCard({ item }: { item: any }) {
       {/* Footer */}
       <View style={styles.footerRow}>
         <View style={styles.footerItem}>
-          <Text style={styles.footerIcon}>📅</Text>
+          {/* <Text style={styles.footerIcon}>📅</Text> */}
+          <ICON_CALENDAR style={{ marginHorizontal: vw(1) }} width={16} height={16} color={"#99A1AF"}/>
           <Text style={styles.footerText}>{item.date}</Text>
         </View>
 

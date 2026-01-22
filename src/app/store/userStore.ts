@@ -1,15 +1,18 @@
 import { create } from 'zustand';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Brand, OEM_LIST } from '../constants/brands';
+import { UserProfile } from '../../features/onboarding/types/profile.types';
 
 type UserState = {
     profile: any | null;
     entityId: string | null;
     loading: boolean;
     selectedBrand: Brand;
+    userProfile: UserProfile | null;
 
     setUser: (data: any) => void;
     setBrand: (data: any) => void;
+    setUserProfile: (data: UserProfile) => void;
     clearUser: () => void;
 };
 
@@ -18,6 +21,11 @@ export const useUserStore = create<UserState>((set) => ({
     entityId: null,
     loading: true,
     selectedBrand: OEM_LIST[0],
+    userProfile: null,
+
+    setUserProfile: (data) => {
+        set({ userProfile: data });
+    },
 
     setUser: (data) => {
         // await AsyncStorage.setItem('USER_PROFILE', JSON.stringify(data));

@@ -9,6 +9,8 @@ export enum Routes {
   VEHICLE = 'Vehicle',
   ALERTS = 'Alerts',
   PROFILE = 'Profile',
+  CREATE_ACCOUNT = 'CreateAccount',
+  SET_USER_NAME = 'SetUserName',
 
   FASTTAG_STACK = 'FastTagStack',
   FASTTAG_HOME = 'FastTagHome',
@@ -65,5 +67,13 @@ export enum Routes {
   PROFILE_WALLET_PIN = 'ProfileWalletPin',
   PROFILE_HELP = 'ProfileHelp',
   PROFILE_CUSTOMER_LOOKUP = 'ProfileCustomerLookup',
+
+
+  // Challan
+  CHALLAN_STACK = 'ChallanStack',
+  TRAFFIC_CHALLAN = 'TrafficChallan',
+  CHALLAN_DETAILS = 'ChallanDetails',
+  CONFIRM_CHALLAN_PAYMENT = 'ConfirmChallanPayment',
+  CHALLAN_PAYMENT_SUCCESS = 'ChallanPaymentSuccess',
 
 }

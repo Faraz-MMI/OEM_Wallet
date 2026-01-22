@@ -187,7 +187,7 @@ export default function ProfileSettingsScreen() {
                 <View style={styles.footer}>
                     <AppText style={styles.version}>Version 1.0.0</AppText>
                     <AppText style={styles.copy}>
-                        © 2025 MMI OEM Wallet
+                        © 2026 MMI OEM Wallet
                     </AppText>
                 </View>
             </ScrollView>

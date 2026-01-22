@@ -70,7 +70,7 @@ export default function VehicleDashboardScreen() {
 
             <View>
               <AppText style={styles.vehicleName}>{selectedBrand.vehicle}</AppText>
-              <AppText style={styles.vehicleNumber}>MH12AB1234</AppText>
+              <AppText style={styles.vehicleNumber}>DL 20 FRZ 0899</AppText>
             </View>
           </View>
 
@@ -83,7 +83,7 @@ export default function VehicleDashboardScreen() {
 
             <View style={styles.statBox}>
               <AppText style={styles.statLabel}>Year</AppText>
-              <AppText style={styles.statValue}>2023</AppText>
+              <AppText style={styles.statValue}>2026</AppText>
             </View>
           </View>
 
@@ -93,7 +93,7 @@ export default function VehicleDashboardScreen() {
             <View style={{ marginLeft: vw(3) }}>
               <AppText style={styles.serviceLabel}>Next Service</AppText>
               <AppText style={styles.serviceValue}>
-                12 Mar • 3,200 km
+                20 Aug • 1,999 kms
               </AppText>
             </View>
           </View>

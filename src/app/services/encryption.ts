@@ -1,4 +1,5 @@
 import CryptoJS from "crypto-js";
+import MD5 from 'crypto-js/md5';
 import { IV, SECRET } from "../../core/config/env";
 
 
@@ -38,3 +39,6 @@ export const decrypt = (cipherText: string) => {
   return decryptedString;
 };
 
+export const md5 = (text: string): string => {
+  return MD5(text).toString();
+};

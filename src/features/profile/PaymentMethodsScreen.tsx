@@ -30,14 +30,14 @@ export default function PaymentMethodsScreen() {
         <CardItem
           brand="Visa"
           number="**** **** **** 4532"
-          expiry="12/25"
+          expiry="12/29"
           color="#DBEAFE"
         />
 
         <CardItem
           brand="Mastercard"
           number="**** **** **** 8901"
-          expiry="08/26"
+          expiry="08/30"
           color="#FFE4CC"
         />
 

@@ -39,7 +39,7 @@ export default function RfidCardScreen({ navigation }: any) {
                   {selectedBrand.vehicle} •
                 </AppText>
                 <AppText style={styles.cardVehicle}>
-                  MH12AB1234
+                  DL 20 FRZ 0899
                 </AppText>
                 <AppText style={[styles.cardMeta, { marginTop: vh(2),marginBottom:-8 }]}>Card Number</AppText>
                 <View style={{ width: '100%', alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between' }}>

@@ -19,15 +19,15 @@ import { Routes } from '../../app/constants/routes';
 import RequestRfidConfirmModal from './RequestRfidConfirmModal';
 import RequestRfidSuccessModal from './RequestRfidSuccessModal';
 
+
 export default function MyEvRfidCardScreen() {
     const navigation = useNavigation<NativeStackNavigationProp<VehicleStackParamList>>();
     const [showConfirm, setShowConfirm] = useState(false);
     const [showSuccess, setShowSuccess] = useState(false);
 
-
     return (
         <ScreenContainer>
-            <CustomTopBar title='My EV RFID Card' onBack={() => { }} />
+            <CustomTopBar title='My EV RFID Card' onBack={() => navigation.goBack()} />
             <ScrollView>
                 <View style={styles.container}>
 
@@ -137,7 +137,7 @@ export default function MyEvRfidCardScreen() {
                 </View>
             </ScrollView>
 
-            const [showConfirm, setShowConfirm] = useState(false);
+            
 
             <RequestRfidConfirmModal
                 visible={showConfirm}

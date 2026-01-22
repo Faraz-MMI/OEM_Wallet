@@ -42,7 +42,7 @@ export default function FastTagLinkedSuccessScreen({ navigation }: any) {
 
                             <View style={styles.vehicleBox}>
                                 <Text style={styles.vehicleLabel}>Vehicle Number</Text>
-                                <Text style={styles.vehicleValue}>MH12AB1234</Text>
+                                <Text style={styles.vehicleValue}>DL 20 FRZ 0899</Text>
                             </View>
                         </View>
 

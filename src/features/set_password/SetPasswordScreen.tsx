@@ -12,9 +12,20 @@ import { Fonts } from '../../ui/theme/fonts';
 import { COLORS } from '../../app/constants/colors';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Routes } from '../../app/constants/routes';
+import { AuthStackParamList } from '../../app/navigation/types';
+import { RouteProp, useRoute } from '@react-navigation/native';
+import { useCreateUser } from '../onboarding/hooks/useCreateUser';
+import { md5 } from '../../app/services/encryption';
+import { useLoginUser } from '../onboarding/hooks/useLoginUser';
+import ScreenContainer from '../../ui/components/ScreenContainer';
+import CustomLoader from '../../ui/components/CustomLoader';
+import { useAuthStore } from '../../app/store/authStore';
 type Props = NativeStackScreenProps<any>;
 
+type SetPasswordRouteProp = RouteProp<AuthStackParamList, typeof Routes.SET_PASSWORD>;
 export default function SetPasswordScreen({ navigation }: Props) {
+  const route = useRoute<SetPasswordRouteProp>();
+  const { mobile, first_name, last_name, email_id } = route.params;
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
   const [showPass, setShowPass] = useState(false);
@@ -24,83 +35,122 @@ export default function SetPasswordScreen({ navigation }: Props) {
   const hasNumber = /\d/.test(password);
   const hasSpecial = /[^A-Za-z0-9]/.test(password);
   const isValid = hasMin && hasNumber && hasSpecial && password === confirm;
+  const { createUser, loading, error } = useCreateUser();
+  const { login, loading: loginLoading, error: loginError } = useLoginUser();
+  const {token} = useAuthStore();
 
   const onSave = () => {
-    navigation.navigate(Routes.SET_PIN)
+    if(token){
+      console.log("Token already exists:", token);
+      navigation.navigate(Routes.SET_PIN);
+      return;
+    }
+    onCreateUser();
   };
 
+  const onCreateUser = async () => {
+    const success = await createUser({
+      userName: mobile,
+      password: md5(password),
+      fname: first_name,
+      lname: last_name,
+      email: email_id,
+      mobile: mobile,
+    });
+
+    if (success) {
+      console.log('User created successfully');
+      const loggedIn = await login({
+        username: mobile,
+        md5Password: md5(password),
+        grant_type: 'password',
+      });
+
+      if (loggedIn && loggedIn.status) {
+        console.log('User logged in successfully');
+        navigation.navigate(Routes.SET_PIN);
+      } else {
+        console.log('Login failed');
+      }
+    }
+
+  }
+
   return (
-    <View style={styles.container}>
-      
-      <AppText style={styles.title}>Set Your Password</AppText>
-      <AppText style={styles.subtitle}>
-        Create a strong password to secure{'\n'}your account
-      </AppText>
+    <ScreenContainer>
+      <View style={styles.container}>
 
-      
-      <View style={styles.field}>
-        <AppText style={styles.label}>Create Password</AppText>
-        <View style={styles.inputWrap}>
-          <TextInput
-            value={password}
-            onChangeText={setPassword}
-            placeholder="Enter password"
-            secureTextEntry={!showPass}
-            style={styles.input}
-          />
-          <TouchableOpacity onPress={() => setShowPass(!showPass)}>
-            <Image source={require('../../assets/icons/icon_eye.png')} style={{}} />
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      <View style={styles.field}>
-        <AppText style={styles.label}>Confirm Password</AppText>
-        <View style={styles.inputWrap}>
-          <TextInput
-            value={confirm}
-            onChangeText={setConfirm}
-            placeholder="Re-enter password"
-            secureTextEntry={!showConfirm}
-            style={styles.input}
-          />
-          <TouchableOpacity
-            onPress={() => setShowConfirm(!showConfirm)}
-          >
-            <Image source={require('../../assets/icons/icon_eye.png')} style={{}} />
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      
-      <View style={styles.rules}>
-        <AppText style={styles.rulesTitle}>
-          Password must contain:
+        <AppText style={styles.title}>Set Your Password</AppText>
+        <AppText style={styles.subtitle}>
+          Create a strong password to secure{'\n'}your account
         </AppText>
 
-        <Rule ok={hasMin} text="Minimum 8 characters" />
-        <Rule ok={hasNumber} text="At least 1 number" />
-        <Rule ok={hasSpecial} text="At least 1 special character" />
-      </View>
 
-      <TouchableOpacity
-        // disabled={!isValid}
-        style={[
-          styles.cta,
-          // !isValid && styles.ctaDisabled,
-        ]}
-        onPress={onSave}
-      >
-        <AppText style={styles.ctaText}>
-          Save & Continue
+        <View style={styles.field}>
+          <AppText style={styles.label}>Create Password</AppText>
+          <View style={styles.inputWrap}>
+            <TextInput
+              value={password}
+              onChangeText={setPassword}
+              placeholder="Enter password"
+              secureTextEntry={!showPass}
+              style={styles.input}
+            />
+            <TouchableOpacity onPress={() => setShowPass(!showPass)}>
+              <Image source={require('../../assets/icons/icon_eye.png')} style={{}} />
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        <View style={styles.field}>
+          <AppText style={styles.label}>Confirm Password</AppText>
+          <View style={styles.inputWrap}>
+            <TextInput
+              value={confirm}
+              onChangeText={setConfirm}
+              placeholder="Re-enter password"
+              secureTextEntry={!showConfirm}
+              style={styles.input}
+            />
+            <TouchableOpacity
+              onPress={() => setShowConfirm(!showConfirm)}
+            >
+              <Image source={require('../../assets/icons/icon_eye.png')} style={{}} />
+            </TouchableOpacity>
+          </View>
+        </View>
+
+
+        <View style={styles.rules}>
+          <AppText style={styles.rulesTitle}>
+            Password must contain:
+          </AppText>
+
+          <Rule ok={hasMin} text="Minimum 8 characters" />
+          <Rule ok={hasNumber} text="At least 1 number" />
+          <Rule ok={hasSpecial} text="At least 1 special character" />
+        </View>
+
+        <TouchableOpacity
+          disabled={!isValid}
+          style={[
+            styles.cta,
+            !isValid && styles.ctaDisabled,
+          ]}
+          onPress={onSave}
+        >
+          <AppText style={styles.ctaText}>
+            Save & Continue
+          </AppText>
+        </TouchableOpacity>
+
+
+        <AppText style={styles.footer}>
+          You can reset your password later from Settings
         </AppText>
-      </TouchableOpacity>
-
-      
-      <AppText style={styles.footer}>
-        You can reset your password later from Settings
-      </AppText>
-    </View>
+      </View>
+      <CustomLoader visible={loading || loginLoading}/>
+    </ScreenContainer>
   );
 }
 

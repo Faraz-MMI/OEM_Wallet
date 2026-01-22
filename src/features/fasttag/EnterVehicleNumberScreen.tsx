@@ -45,13 +45,13 @@ export default function EnterVehicleNumberScreen() {
                 <TextInput
                     value={vehicleNo}
                     onChangeText={setVehicleNo}
-                    placeholder="MH12AB1234"
+                    placeholder="DL 20 FRZ 0899"
                     autoCapitalize="characters"
                     style={styles.input}
                 />
 
                 <Text style={styles.helperText}>
-                    Enter vehicle number without spaces (e.g., MH12AB1234)
+                    Enter vehicle number without spaces (e.g., DL 20 FRZ 0899)
                 </Text>
 
                 {/* EXAMPLES */}
@@ -60,7 +60,7 @@ export default function EnterVehicleNumberScreen() {
 
                     <View style={styles.examplesRow}>
                         <View style={styles.chip}>
-                            <Text style={styles.chipText}>MH12AB1234</Text>
+                            <Text style={styles.chipText}>DL 20 FRZ 0899</Text>
                         </View>
                         <View style={styles.chip}>
                             <Text style={styles.chipText}>DL01CD5678</Text>
