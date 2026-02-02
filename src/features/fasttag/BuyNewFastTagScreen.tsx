@@ -16,12 +16,16 @@ import { FastTagStackParamList } from '../../app/navigation/types';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
 import { Routes } from '../../app/constants/routes';
+import { BBPS_LOG } from '../../assets/icons';
 
 export default function BuyNewFastTagScreen() {
     const navigation = useNavigation<NativeStackNavigationProp<FastTagStackParamList>>();
     return (
         <ScreenContainer>
-            <CustomTopBar title="Buy New FastTag" />
+            <CustomTopBar title="Buy New FastTag"
+                onBack={() => { navigation.goBack() }}
+                icon={<BBPS_LOG width={vw(20)} height={vw(20)} />}
+                canShowIcon />
             <ScrollView
                 style={styles.container}
                 contentContainerStyle={{ paddingBottom: vh(4) }}
@@ -92,7 +96,7 @@ export default function BuyNewFastTagScreen() {
                 </View>
 
                 {/* CTA */}
-                <TouchableOpacity style={styles.button} onPress={()=>{
+                <TouchableOpacity style={styles.button} onPress={() => {
                     navigation.navigate(Routes.FASTTAG_PURCHASE_SUCCESS)
                 }}>
                     <Text style={styles.buttonText}>Proceed to Payment</Text>

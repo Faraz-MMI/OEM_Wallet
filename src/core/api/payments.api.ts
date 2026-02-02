@@ -1,30 +1,24 @@
-// import { API_BASE_URL } from '../constants/env';
+import { CheckTransactionStatusRequest, CheckTransactionStatusResponse } from "../types/checkTransaction.types";
+import { CreatePaytmOrderRequest, CreatePaytmOrderResponse } from "../types/createPaytmOrder.types";
+import apiClient from "./apiClient";
 
-// export type CreatePaytmOrderRequest = {
-//   amount: string;
-//   customerId: string;
-//   mobile: string;
-// };
 
-// export type CreatePaytmOrderResponse = {
-//   orderId: string;
-//   mid: string;
-//   txnToken: string;
-//   amount: string;
-// };
+export const createPaytmOrder = async (
+    payload: CreatePaytmOrderRequest
+): Promise<CreatePaytmOrderResponse> => {
+    const { data } = await apiClient.post<CreatePaytmOrderResponse>(
+        '/AddToWallet/InitiateTransaction',
+        payload
+    );
+    return data;
+};
 
-// export const createPaytmOrder = async (
-//   payload: CreatePaytmOrderRequest
-// ): Promise<CreatePaytmOrderResponse> => {
-//   const res = await fetch(`${API_BASE_URL}/paytm/create-order`, {
-//     method: 'POST',
-//     headers: { 'Content-Type': 'application/json' },
-//     body: JSON.stringify(payload),
-//   });
-
-//   if (!res.ok) {
-//     throw new Error('Failed to create Paytm order');
-//   }
-
-//   return res.json();
-// };
+export const checkTransactionStatus = async (
+  payload: CheckTransactionStatusRequest
+): Promise<CheckTransactionStatusResponse> => {
+  const { data } = await apiClient.post<CheckTransactionStatusResponse>(
+    '/AddToWallet/CheckTransactionStatus',
+    payload
+  );
+  return data;
+};

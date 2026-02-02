@@ -12,11 +12,12 @@ import { Fonts } from '../../ui/theme/fonts';
 import { COLORS } from '../../app/constants/colors';
 import CustomTopBar from '../../ui/components/CustomTopBar';
 import { Routes } from '../../app/constants/routes';
+import { BBPS_LOG } from '../../assets/icons';
 
 export default function FastTagFoundScreen({ navigation }: any) {
     return (
         <ScreenContainer>
-            <CustomTopBar title="FastTag Found" onBack={() => navigation.goBack()} />
+            <CustomTopBar title="FastTag Found" onBack={() => navigation.goBack()} icon={<BBPS_LOG width={vw(20)} height={vw(20)} />} canShowIcon />
             <ScrollView>
                 <View style={styles.container}>
 

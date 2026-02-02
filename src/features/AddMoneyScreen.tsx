@@ -4,6 +4,7 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import AppText from '../ui/components/AppText';
@@ -15,14 +16,82 @@ import { MainStack } from '../app/navigation/types';
 import { Routes } from '../app/constants/routes';
 import CustomTopBar from '../ui/components/CustomTopBar';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { startPaytmTransaction } from '../app/services/paytm.service';
+import CustomLoader from '../ui/components/CustomLoader';
+import ErrorPopup from '../ui/components/ErrorPopup';
+import { useCreatePaytmOrder } from '../core/hooks/useCreatePaytmOrder';
+import { useUserStore } from '../app/store/userStore';
+import { useCheckTransactionStatus } from '../core/hooks/useCheckTransactionStatus';
 
 type NavigationProp = NativeStackNavigationProp<MainStack>;
 export default function AddMoneyScreen() {
   const navigation = useNavigation<NavigationProp>();
+  const { userProfile } = useUserStore();
+  const { createPaytmOrder, loading: paytmOrderLoading, error } = useCreatePaytmOrder();
+  const { checkStatus, loading: checkStatusLoading, error: checkStatusError } = useCheckTransactionStatus();
   const [amount, setAmount] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [popupMessage, setPopupMessage] = useState('');
+  const [showPopup, setShowPopup] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   const quickAmounts = [500, 1000, 2000, 5000];
   const isValid = Number(amount) > 0;
+
+  const onProceedToPay = async () => {
+    const response = await createPaytmOrder({
+      txnAmount: amount,
+      firstName: userProfile?.fname || "",
+      lastName: userProfile?.lname || "",
+      mobile: userProfile?.mobile || "",
+      userName: "OEM_" + userProfile?.mobile,
+      website: "mapmyindia.com"
+    });
+
+    if (response?.status && response?.result?.order_id) {
+      startPayment(response?.result?.order_id, response?.result?.body.txnToken)
+    }
+
+  }
+
+  const startPayment = async (orderId: string, transactionId: string) => {
+    startPaytmTransaction({ orderId: orderId, txnToken: transactionId, amount: Number(amount) }).then((result) => {
+      if (result.success) {
+        checkPaymentStatus(orderId);
+      } else {
+        console.log("Payment failed:", result.message);
+
+        if (result.message && result.message.includes("onBackPressedCancelTransaction")) {
+          setPopupMessage("Payment cancelled by user");
+        } else {
+          setPopupMessage(result.message || 'Payment failed');
+        }
+        setIsError(true);
+        setShowPopup(true);
+      }
+    });
+  }
+
+  const checkPaymentStatus = async (orderId: string) => {
+    const response = await checkStatus({
+      order_id: orderId,
+    });
+
+    if (!response) {
+      setPopupMessage(error || 'Payment failed');
+      setIsError(true);
+      setShowPopup(true);
+      console.log(error);
+      return;
+    }
+
+    const status =
+      response.result.body.resultInfo.resultStatus;
+
+    console.log('TXN STATUS:', status);
+
+    navigation.navigate(Routes.PAYMENT_SUCCESS, { amount: Number(amount) });
+  }
 
   return (
 
@@ -62,7 +131,7 @@ export default function AddMoneyScreen() {
             styles.payButton,
             { backgroundColor: isValid ? '#005ABF' : '#9DBCF2' },
           ]}
-          onPress={() => navigation.navigate(Routes.PAYMENT_SUCCESS, { amount: Number(amount) })}
+          onPress={onProceedToPay}
         >
           <AppText style={styles.payText}>Proceed to Pay</AppText>
         </TouchableOpacity>
@@ -70,6 +139,15 @@ export default function AddMoneyScreen() {
         <AppText style={styles.helper}>
           Payment via UPI / Debit / Credit Card
         </AppText>
+        <ErrorPopup
+          title={!isError ? 'Payment Successful' : 'Payment Error'}
+          visible={showPopup}
+          message={popupMessage}
+          onPrimary={() => setShowPopup(false)}
+          isError={isError}
+          canShowPrimary={true}
+        />
+        <CustomLoader visible={loading || paytmOrderLoading || checkStatusLoading} />
       </View>
     </SafeAreaView>
   );

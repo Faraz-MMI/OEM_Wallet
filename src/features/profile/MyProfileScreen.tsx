@@ -18,7 +18,7 @@ import { useUserStore } from '../../app/store/userStore';
 
 export default function MyProfileScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<ProfileStackParamList>>();
-  const { profile, entityId, setBrand, selectedBrand } = useUserStore();
+  const { profile, entityId, setBrand, selectedBrand,userProfile } = useUserStore();
   const account =
     profile != null && profile.accounts != null && profile.accounts.length > 0 ? profile.accounts[0] : null;
 
@@ -105,7 +105,7 @@ export default function MyProfileScreen() {
 
         <View style={styles.avatarCard}>
           <View style={styles.avatar}>
-            <AppText style={styles.avatarText}>{getInitials(profile.firstName,profile.lastName)}</AppText>
+            <AppText style={styles.avatarText}>{getInitials(userProfile?.fname,userProfile?.lname)}</AppText>
 
             <TouchableOpacity style={styles.cameraBtn}>
               <AppText style={styles.cameraIcon}>📷</AppText>
@@ -119,19 +119,19 @@ export default function MyProfileScreen() {
 
 
         <Section title="Personal Details">
-          <Field label="First Name" value={profile?.firstName} />
-          <Field label="Last Name" value={profile?.lastName} />
-          <Field label="Mobile Number" value={`${profile?.mobile.countryCode} ${profile?.mobile.value}`} disabled />
+          <Field label="First Name" value={userProfile?.fname || ""} />
+          <Field label="Last Name" value={userProfile?.lname || ""} />
+          <Field label="Mobile Number" value={`91 ${userProfile?.mobile}`} disabled />
           <Field
             label="Email ID (Optional)"
-            value={profile.email}
+            value={userProfile?.email || ""}
           />
         </Section>
 
 
         <Section title="Additional Information">
-          <Field label="Date of Birth (Optional)" value={profile.dob} />
-          <Field label="Gender (Optional)" value={profile.gender} />
+          <Field label="Date of Birth (Optional)" value={userProfile?.dob || ""} />
+          <Field label="Gender (Optional)" value={""} />
         </Section>
 
 

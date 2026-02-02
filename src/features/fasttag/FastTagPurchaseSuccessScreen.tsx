@@ -14,6 +14,7 @@ import { FastTagStackParamList, MainStack } from '../../app/navigation/types';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
 import { Routes } from '../../app/constants/routes';
+import { BBPS_SHORT_LOGO, ICON_ATM_CARD, ICON_CARD } from '../../assets/icons';
 
 export default function FastTagPurchaseSuccessScreen() {
     const navigation = useNavigation<NativeStackNavigationProp<MainStack>>();
@@ -23,12 +24,12 @@ export default function FastTagPurchaseSuccessScreen() {
 
                 {/* Success Icon */}
                 <View style={styles.successIcon}>
-                    <Text style={styles.check}>✓</Text>
+                    <BBPS_SHORT_LOGO />
                 </View>
 
                 {/* Title */}
                 <Text style={styles.title}>
-                    FastTag Purchase Successful ✅
+                    FastTag Purchase Successful
                 </Text>
 
                 <Text style={styles.subtitle}>
@@ -45,9 +46,15 @@ export default function FastTagPurchaseSuccessScreen() {
                         end={{ x: 1, y: 1 }}
                         style={styles.fastTagCard}
                     >
-                        <Text style={styles.cardLabel}>Purchased FastTag</Text>
-                        <Text style={styles.bankName}>ICICI Bank</Text>
-
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <View>
+                                <Text style={styles.cardLabel}>Purchased FastTag</Text>
+                                <Text style={styles.bankName}>ICICI Bank</Text>
+                            </View>
+                            <View style={styles.atmCard}>
+                                <ICON_CARD width={vw(6)} height={vw(6)} color={COLORS.WHITE}/>
+                            </View>
+                        </View>
                         <View style={styles.vehicleBox}>
                             <Text style={styles.vehicleLabel}>Vehicle Number</Text>
                             <Text style={styles.vehicleNumber}>DL 20 FRZ 0899</Text>
@@ -137,7 +144,7 @@ const styles = StyleSheet.create({
         width: vw(18),
         height: vw(18),
         borderRadius: vw(9),
-        backgroundColor: '#16A34A',
+        // backgroundColor: '#16A34A',
         justifyContent: 'center',
         alignItems: 'center',
         marginBottom: vh(3),
@@ -288,4 +295,13 @@ const styles = StyleSheet.create({
         color: '#111827',
         fontFamily: Fonts.medium,
     },
+    atmCard: {
+        width: vw(10),
+        height: vw(10),
+        borderRadius: vw(5),
+        backgroundColor: 'rgba(255, 255, 255, 0.2)',
+        marginRight: vw(4),
+        alignItems: 'center',
+        justifyContent: 'center'
+    }
 });

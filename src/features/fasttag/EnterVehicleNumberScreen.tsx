@@ -15,6 +15,7 @@ import { FastTagStackParamList } from '../../app/navigation/types';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
 import { Routes } from '../../app/constants/routes';
+import { BBPS_LOG } from '../../assets/icons';
 
 export default function EnterVehicleNumberScreen() {
     const [vehicleNo, setVehicleNo] = useState('');
@@ -24,7 +25,8 @@ export default function EnterVehicleNumberScreen() {
 
     return (
         <ScreenContainer>
-            <CustomTopBar title="Enter Vehicle Number" subTitle='IDFC Bank' onBack={()=>navigation.goBack()}/>
+            <CustomTopBar title="Enter Vehicle Number" subTitle='IDFC Bank'
+                onBack={() => navigation.goBack()} icon={<BBPS_LOG width={vw(20)} height={vw(20)} />} canShowIcon />
             <View style={styles.container}>
 
                 {/* INFO CARD */}

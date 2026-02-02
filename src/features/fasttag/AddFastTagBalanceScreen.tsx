@@ -15,6 +15,7 @@ import { Routes } from '../../app/constants/routes';
 import ScreenContainer from '../../ui/components/ScreenContainer';
 import CustomTopBar from '../../ui/components/CustomTopBar';
 import { COLORS } from '../../app/constants/colors';
+import { BBPS_LOG } from '../../assets/icons';
 
 export default function AddFastTagBalanceScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<FastTagStackParamList>>();
@@ -32,7 +33,9 @@ export default function AddFastTagBalanceScreen() {
 
   return (
     <ScreenContainer>
-      <CustomTopBar title='Add FastTag Balance' onBack={() => navigation.goBack()} />
+      <CustomTopBar title='Add FastTag Balance' onBack={() => navigation.goBack()}
+        icon={<BBPS_LOG width={vw(20)} height={vw(20)} />}
+        canShowIcon />
       <View style={styles.container}>
         <AppText style={styles.label}>Select Amount</AppText>
 
@@ -58,7 +61,7 @@ export default function AddFastTagBalanceScreen() {
           ))}
         </View>
 
-        <AppText style={[styles.label,{marginTop:vh(4)}]}>Custom Amount</AppText>
+        <AppText style={[styles.label, { marginTop: vh(4) }]}>Custom Amount</AppText>
 
         <View style={styles.inputBox}>
           <TextInput

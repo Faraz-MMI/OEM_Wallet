@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  Image,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import ScreenContainer from '../../ui/components/ScreenContainer';
@@ -17,13 +18,13 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import CustomTopBar from '../../ui/components/CustomTopBar';
 import { Routes } from '../../app/constants/routes';
 import AppText from '../../ui/components/AppText';
-import { ICON_ATM_CARD, ICON_NOTES, ICON_PLUS, ICON_TIMER } from '../../assets/icons';
+import { BBPS_LOG, ICON_ATM_CARD, ICON_NOTES, ICON_PLUS, ICON_TIMER } from '../../assets/icons';
 
 export default function FastTagScreen() {
-  const navigation = useNavigation<NativeStackNavigationProp<FastTagStackParamList>>();
+  const navigation = useNavigation<NativeStackNavigationProp<MainStack>>();
   return (
     <ScreenContainer>
-      <CustomTopBar title='FastTag' onBack={()=>navigation.goBack()}/>
+      <CustomTopBar title='FastTag' onBack={() => navigation.goBack()} />
       <ScrollView
         contentContainerStyle={styles.container}
         showsVerticalScrollIndicator={false}
@@ -44,20 +45,20 @@ export default function FastTagScreen() {
         </View>
 
         {/* ACTIONS */}
-        <TouchableOpacity style={styles.primaryBtn} onPress={() => { navigation.navigate(Routes.FASTTAG_ADD_BALANCE) }}>
+        <TouchableOpacity style={styles.primaryBtn} onPress={() => { navigation.navigate(Routes.FASTTAG_STACK, { screen: Routes.FASTTAG_ADD_BALANCE }) }}>
           <Text style={styles.primaryText}>Add Balance</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.secondaryBtn} onPress={() => { navigation.navigate(Routes.FASTTAG_HISTORY) }}>
-           <ICON_TIMER width={18} height={18} color="#0A0A0A" />
-           <AppText style={[styles.secondaryText,{marginHorizontal: vw(2)}]}>View History</AppText>
-         </TouchableOpacity>
-        
+        <TouchableOpacity style={styles.secondaryBtn} onPress={() => { navigation.navigate(Routes.FASTTAG_STACK, { screen: Routes.FASTTAG_HISTORY }) }}>
+          <ICON_TIMER width={18} height={18} color="#0A0A0A" />
+          <AppText style={[styles.secondaryText, { marginHorizontal: vw(2) }]}>View History</AppText>
+        </TouchableOpacity>
 
-        <TouchableOpacity style={styles.secondaryBtn} onPress={() => {  }}>
-           <ICON_NOTES width={18} height={18} color="#0A0A0A" />
-           <AppText style={[styles.secondaryText,{marginHorizontal: vw(2)}]}>Traffic Challans</AppText>
-         </TouchableOpacity>
+
+        <TouchableOpacity style={styles.secondaryBtn} onPress={() => { navigation.navigate(Routes.CHALLAN_STACK, { screen: Routes.TRAFFIC_CHALLAN }) }}>
+          <ICON_NOTES width={18} height={18} color="#0A0A0A" />
+          <AppText style={[styles.secondaryText, { marginHorizontal: vw(2) }]}>Traffic Challans</AppText>
+        </TouchableOpacity>
 
         {/* TIP */}
         <View style={styles.tipBox}>
@@ -92,7 +93,7 @@ export default function FastTagScreen() {
           subtitle="Link your FastTag from any bank"
           color="#EFF6FF"
           icon={<ICON_PLUS color={COLORS.APP_PRIMARY} />}
-          onPress={() => navigation.navigate(Routes.FASTTAG_SELECT_BANK)}
+          onPress={() => navigation.navigate(Routes.FASTTAG_STACK, { screen: Routes.FASTTAG_SELECT_BANK })}
         />
 
         <ManageCard
@@ -100,7 +101,7 @@ export default function FastTagScreen() {
           subtitle="Get a new FastTag delivered to you"
           color="#FAF5FF"
           icon={<ICON_ATM_CARD color={COLORS.APP_PRIMARY} />}
-          onPress={() => navigation.navigate(Routes.FASTTAG_BUY)}
+          onPress={() => navigation.navigate(Routes.FASTTAG_STACK, { screen: Routes.FASTTAG_BUY })}
         />
 
       </ScrollView>
@@ -171,16 +172,17 @@ function FastTagCard({
   );
 }
 
-function ManageCard({ title, subtitle,color,icon,onPress }: any) {
+function ManageCard({ title, subtitle, color, icon, onPress }: any) {
   return (
     <TouchableOpacity style={styles.manageCard} onPress={onPress}>
-      <View style={[styles.manageIcon,{backgroundColor:color}]}>
+      <View style={[styles.manageIcon, { backgroundColor: color }]}>
         {icon}
       </View>
       <View>
         <Text style={styles.manageTitle}>{title}</Text>
         <Text style={styles.manageSub}>{subtitle}</Text>
       </View>
+      <BBPS_LOG  style={{ marginHorizontal: vw(4) }} />
     </TouchableOpacity>
   );
 }
@@ -245,7 +247,7 @@ const styles = StyleSheet.create({
     fontSize: FONT_SIZE.FONT_14,
     color: '#111827',
     fontFamily: Fonts.regular,
-    
+
   },
 
   tipBox: {
@@ -369,8 +371,8 @@ const styles = StyleSheet.create({
     borderRadius: vw(4),
     backgroundColor: '#EFF6FF',
     marginRight: vw(4),
-    alignItems:'center',
-    justifyContent:'center'
+    alignItems: 'center',
+    justifyContent: 'center'
   },
 
   manageTitle: {

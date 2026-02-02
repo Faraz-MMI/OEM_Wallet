@@ -7,12 +7,13 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import AppText from '../../ui/components/AppText';
-import { vw, vh } from '../../ui/theme/dimensions';
+import { vw, vh, FONT_SIZE } from '../../ui/theme/dimensions';
 import { Fonts } from '../../ui/theme/fonts';
 import ScreenContainer from '../../ui/components/ScreenContainer';
 import CustomTopBar from '../../ui/components/CustomTopBar';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { ICON_BOTTOM_ANGLE_ARROW } from '../../assets/icons';
+import { ICON_BOTTOM_ANGLE_ARROW, ICON_CHAT, ICON_EMAIL, ICON_PHONE, ICON_QUESTIONMARK_CIRCLE } from '../../assets/icons';
+import { COLORS } from '../../app/constants/colors';
 
 const FAQS = [
   { q: 'How do I add money to my wallet?', tag: 'Wallet usage', instructions: 'Go to Home > Add Money, select your preferred payment method (UPI, Card, Net Banking), enter the amount, and complete the payment. Money will be credited instantly.' },
@@ -35,13 +36,21 @@ export default function HelpSupportScreen({ navigation }: Props) {
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
 
         <LinearGradient
-          colors={['#2563EB', '#005ABF']}
+          colors={['#2B7FFF', '#155DFC']}
           style={styles.hero}
         >
-          <AppText style={styles.heroTitle}>Need Help?</AppText>
-          <AppText style={styles.heroSub}>
-            Our support team is here for you
-          </AppText>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <View style={styles.avatar}>
+              <ICON_CHAT color={COLORS.WHITE} width={vw(7)} height={vw(7)} />
+            </View>
+            <View>
+              <AppText style={styles.heroTitle}>Need Help?</AppText>
+              <AppText style={styles.heroSub}>
+                Our support team is here for you
+              </AppText>
+            </View>
+          </View>
+
 
           <AppText style={styles.heroDesc}>
             Our support team is available to help with wallet, payment, and
@@ -49,8 +58,10 @@ export default function HelpSupportScreen({ navigation }: Props) {
           </AppText>
 
           <View style={styles.heroActions}>
-            <ActionBtn label="Email" />
-            <ActionBtn label="Call" />
+            <ActionBtn label="Email"
+              icon={<ICON_EMAIL style={{ marginRight: vw(2) }} color={COLORS.WHITE} />}
+            />
+            <ActionBtn label="Call" icon={<ICON_PHONE style={{ marginRight: vw(2) }} color={COLORS.WHITE} />} />
           </View>
         </LinearGradient>
 
@@ -58,18 +69,25 @@ export default function HelpSupportScreen({ navigation }: Props) {
         <View style={styles.card}>
           <AppText style={styles.cardTitle}>Contact Support</AppText>
 
-          <InfoRow label="Email" value="frz.support@walletapp.com" color="#2563EB" />
-          <InfoRow label="Phone" value="+91 9940368464" color="#16A34A" />
+          <InfoRow label="Email" value="frz.support@walletapp.com" color="#2563EB"
+            icon={<ICON_EMAIL color="#2563EB" width={vw(5)} height={vw(5)} />} bgColor={"#DBEAFE"} />
+          <InfoRow label="Phone" value="+91 9940368464" color="#16A34A" icon={<ICON_PHONE color="#16A34A" width={vw(5)} height={vw(5)} />} bgColor={"#DCFCE7"} />
+        </View>
+
+        <View style={{ alignItems: 'center', flexDirection: 'row' }}>
+          <ICON_QUESTIONMARK_CIRCLE width={vw(7)} height={vw(7)} style={{ marginTop: vh(4),marginRight: vw(2) }} />
+          <AppText style={styles.sectionTitle}>Frequently Asked Questions</AppText>
         </View>
 
 
-        <AppText style={styles.sectionTitle}>Frequently Asked Questions</AppText>
-
-        <View style={styles.chipsRow}>
-          <Chip label="Wallet usage" />
-          <Chip label="Fastag recharge" />
-          <Chip label="Vouchers" />
-        </View>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginTop: vh(2) }}>
+          <View style={styles.chipsRow}>
+            <Chip label="Wallet usage" />
+            <Chip label="Fastag recharge" />
+            <Chip label="Voucher purchases" />
+            <Chip label="Payment failures" />
+          </View>
+        </ScrollView>
 
         {FAQS.map((item, index) => (
           <FAQItem
@@ -96,9 +114,12 @@ export default function HelpSupportScreen({ navigation }: Props) {
   );
 }
 
-function ActionBtn({ label }: { label: string }) {
+function ActionBtn({ label, icon }: { label: string; icon: React.ReactNode }) {
   return (
     <TouchableOpacity style={styles.actionBtn}>
+      <View style={{ marginRight: vw(0.5), marginLeft: vw(4) }}>
+        {icon}
+      </View>
       <AppText style={styles.actionText}>{label}</AppText>
     </TouchableOpacity>
   );
@@ -108,16 +129,26 @@ function InfoRow({
   label,
   value,
   color,
+  icon,
+  bgColor
 }: {
   label: string;
   value: string;
   color: string;
+  icon: React.ReactNode;
+  bgColor: string;
 }) {
   return (
-    <View style={styles.infoRow}>
-      <AppText style={styles.infoLabel}>{label}</AppText>
-      <AppText style={[styles.infoValue, { color }]}>{value}</AppText>
+    <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: vh(2) }}>
+      <View style={[styles.infoRowIconBg, { backgroundColor: bgColor }]}>
+        {icon}
+      </View>
+      <View style={styles.infoRow}>
+        <AppText style={styles.infoLabel}>{label}</AppText>
+        <AppText style={[styles.infoValue, { color }]}>{value}</AppText>
+      </View>
     </View>
+
   );
 }
 
@@ -142,12 +173,11 @@ function FAQItem({
     <TouchableOpacity style={styles.faqItem} onPress={onPress}>
       <View style={styles.faqHeader}>
         <AppText style={styles.faqQ}>{item.q}</AppText>
-        {/* <AppText>{open ? '▲' : '▼'}</AppText> */}
         {open ? <ICON_BOTTOM_ANGLE_ARROW style={{ transform: [{ scaleY: -1 }] }} /> : <ICON_BOTTOM_ANGLE_ARROW />}
       </View>
       <AppText style={styles.faqTag}>{item.tag}</AppText>
       {open && (
-        <AppText style={{ marginTop: vh(1.5), color: '#374151' }}>
+        <AppText style={{ marginTop: vh(1.5), color: '#374151',fontFamily: Fonts.regular, fontSize: FONT_SIZE.FONT_14, lineHeight: vh(2.2) }}>
           {item.instructions}
         </AppText>
       )}
@@ -169,20 +199,24 @@ const styles = StyleSheet.create({
   },
 
   heroTitle: {
-    fontSize: vw(4.8),
-    fontFamily: Fonts.semiBold,
+    fontSize: FONT_SIZE.FONT_18,
+    fontFamily: Fonts.bold,
     color: '#FFFFFF',
   },
 
   heroSub: {
     marginTop: vh(0.5),
-    color: '#DDE9FF',
+    color: '#DBEAFE',
+    fontFamily: Fonts.regular,
+    fontSize: FONT_SIZE.FONT_14
   },
 
   heroDesc: {
     marginTop: vh(1.2),
-    color: '#E5EEFF',
-    fontSize: vw(3.2),
+    color: '#DBEAFE',
+    fontFamily: Fonts.regular,
+    fontSize: FONT_SIZE.FONT_14,
+    lineHeight: vh(2.4)
   },
 
   heroActions: {
@@ -197,6 +231,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginRight: vw(2),
     alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'flex-start'
   },
 
   actionText: {
@@ -223,19 +259,20 @@ const styles = StyleSheet.create({
   },
 
   infoLabel: {
-    color: '#6B7280',
-    fontSize: vw(3.2),
+    color: '#4A5565',
+    fontSize: FONT_SIZE.FONT_14,
+    fontFamily: Fonts.regular,
   },
 
   infoValue: {
-    fontSize: vw(3.6),
-    fontFamily: Fonts.medium,
+    fontSize: FONT_SIZE.FONT_16,
+    fontFamily: Fonts.bold,
   },
 
   sectionTitle: {
     marginTop: vh(4),
-    fontSize: vw(4.4),
-    fontFamily: Fonts.semiBold,
+    fontSize: FONT_SIZE.FONT_18,
+    fontFamily: Fonts.bold,
   },
 
   chipsRow: {
@@ -255,7 +292,9 @@ const styles = StyleSheet.create({
   },
 
   chipText: {
-    fontSize: vw(3.2),
+    fontSize: FONT_SIZE.FONT_14,
+    fontFamily: Fonts.regular,
+    color: '#364153',
   },
 
   faqItem: {
@@ -271,15 +310,17 @@ const styles = StyleSheet.create({
   },
 
   faqQ: {
-    fontSize: vw(3.6),
-    fontFamily: Fonts.medium,
+    fontSize: FONT_SIZE.FONT_16,
+    fontFamily: Fonts.bold,
     flex: 1,
+    color: '#101828',
   },
 
   faqTag: {
     marginTop: vh(0.5),
-    color: '#6B7280',
-    fontSize: vw(3),
+    color: '#6A7282',
+    fontSize: FONT_SIZE.FONT_12,
+    fontFamily: Fonts.regular,
   },
 
   footer: {
@@ -292,5 +333,23 @@ const styles = StyleSheet.create({
   footerText: {
     fontSize: vw(3.2),
     color: '#92400E',
+  },
+  avatar: {
+    width: vw(14),
+    height: vw(14),
+    borderRadius: vw(7),
+    backgroundColor: '#005ABF',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: vw(4),
+  },
+  infoRowIconBg: {
+    width: vw(12),
+    height: vw(12),
+    borderRadius: vw(6),
+    backgroundColor: '#DBEAFE',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: vw(4),
   },
 });

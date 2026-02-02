@@ -1,13 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
+  ScrollView,
 } from 'react-native';
 import ScreenContainer from '../../ui/components/ScreenContainer';
 import { COLORS } from '../../app/constants/colors';
 import { Fonts } from '../../ui/theme/fonts';
+import { vh, vw } from '../../ui/theme/dimensions';
+import CustomTopBar from '../../ui/components/CustomTopBar';
+import WalletPinModal from '../../ui/components/WalletPinModal';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { MainStack } from '../../app/navigation/types';
+import { Routes } from '../../app/constants/routes';
 
 type Props = {
   walletBalance: number;
@@ -16,79 +24,108 @@ type Props = {
 const CHALLAN_AMOUNT = 1000;
 
 export default function ConfirmChallanPaymentScreen() {
+  const navigation = useNavigation<NativeStackNavigationProp<MainStack>>()
   const hasSufficientBalance = 1001 >= CHALLAN_AMOUNT;
+  const [showPin, setShowPin] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   return (
     <ScreenContainer>
-      {/* ===== Challan Summary ===== */}
-      <Text style={styles.sectionTitle}>Challan Summary</Text>
+      <CustomTopBar title="Confirm Payment" onBack={() => { }} />
+      <View style={{
+        flex: 1,
+      }}>
+        <ScrollView
+          contentContainerStyle={styles.container}
+          showsVerticalScrollIndicator={false}
+        >
+          {/* ===== Challan Summary ===== */}
+          <Text style={styles.sectionTitle}>Challan Summary</Text>
 
-      <View style={styles.summaryCard}>
-        <Text style={styles.challanType}>Traffic Challan</Text>
-        <Text style={styles.challanTitle}>Overspeeding</Text>
-        <Text style={styles.challanLocation}>BKC Flyover, Mumbai</Text>
+          <View style={styles.summaryCard}>
+            <Text style={styles.challanType}>Traffic Challan</Text>
+            <Text style={styles.challanTitle}>Overspeeding</Text>
+            <Text style={styles.challanLocation}>BKC Flyover, Mumbai</Text>
 
-        <View style={styles.divider} />
+            <View style={styles.divider} />
 
-        <Text style={styles.challanIdLabel}>Challan ID</Text>
-        <Text style={styles.challanId}>CHLN202412001</Text>
-      </View>
+            <Text style={styles.challanIdLabel}>Challan ID</Text>
+            <Text style={styles.challanId}>CHLN202412001</Text>
+          </View>
 
-      {/* ===== Payment Details ===== */}
-      <Text style={styles.sectionTitle}>Payment Details</Text>
+          {/* ===== Payment Details ===== */}
+          <Text style={styles.sectionTitle}>Payment Details</Text>
 
-      <View style={styles.paymentCard}>
-        <Row label="Vehicle" value="MH12AB1234" />
-        <Row label="Challan Amount" value="₹1,000" />
-        <Row label="Payment Source" value="FastTag Wallet" highlight />
+          <View style={styles.paymentCard}>
+            <Row label="Vehicle" value="MH12AB1234" />
+            <Row label="Challan Amount" value="₹1,000" />
+            <Row label="Payment Source" value="FastTag Wallet" highlight />
 
-        <View style={styles.divider} />
+            <View style={styles.divider} />
 
-        <Row label="Total Amount" value="₹1,000" strong />
-      </View>
+            <Row label="Total Amount" value="₹1,000" strong />
+          </View>
 
-      {/* ===== Balance Status ===== */}
-      {hasSufficientBalance ? (
-        <View style={styles.successBox}>
-          <Text style={styles.successTitle}>Sufficient Balance</Text>
-          <Text style={styles.successText}>
-            Current FastTag Balance: ₹ 1,001
-          </Text>
-        </View>
-      ) : (
-        <View style={styles.errorBox}>
-          <Text style={styles.errorTitle}>Insufficient Balance</Text>
-          <Text style={styles.errorText}>
-            Current FastTag Balance: ₹1,001
-          </Text>
+          {/* ===== Balance Status ===== */}
+          {hasSufficientBalance ? (
+            <View style={styles.successBox}>
+              <Text style={styles.successTitle}>Sufficient Balance</Text>
+              <Text style={styles.successText}>
+                Current FastTag Balance: ₹ 1,001
+              </Text>
+            </View>
+          ) : (
+            <View style={styles.errorBox}>
+              <Text style={styles.errorTitle}>Insufficient Balance</Text>
+              <Text style={styles.errorText}>
+                Current FastTag Balance: ₹1,001
+              </Text>
 
-          <TouchableOpacity>
-            <Text style={styles.rechargeText}>Recharge FastTag</Text>
+              <TouchableOpacity>
+                <Text style={styles.rechargeText}>Recharge FastTag</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+
+          {/* ===== Important Info ===== */}
+          <View style={styles.infoBox}>
+            <Text style={styles.infoText}>• Payment confirmation will be sent to your registered mobile</Text>
+            <Text style={styles.infoText}>• Challan will be marked as paid within 24 hours</Text>
+            <Text style={styles.infoText}>• Keep the transaction receipt for your records</Text>
+          </View>
+
+          {/* ===== CTA ===== */}
+          <TouchableOpacity
+            disabled={!hasSufficientBalance}
+            style={[
+              styles.payButton,
+              !hasSufficientBalance && styles.payButtonDisabled,
+            ]}
+            onPress={() => { setShowPin(true) }}
+          >
+            <Text style={styles.payButtonText}>Proceed to Pay</Text>
           </TouchableOpacity>
-        </View>
-      )}
 
-      {/* ===== Important Info ===== */}
-      <View style={styles.infoBox}>
-        <Text style={styles.infoText}>• Payment confirmation will be sent to your registered mobile</Text>
-        <Text style={styles.infoText}>• Challan will be marked as paid within 24 hours</Text>
-        <Text style={styles.infoText}>• Keep the transaction receipt for your records</Text>
+          <Text style={styles.pinHint}>
+            You will be prompted for your 4-digit PIN
+          </Text>
+        </ScrollView>
+        <WalletPinModal
+          visible={showPin}
+          loading={loading}
+          onClose={() => setShowPin(false)}
+          onSubmit={(pin) => {
+            setLoading(true);
+            setTimeout(() => {
+              setLoading(false);
+              setShowPin(false);
+              // navigate to success
+              navigation.navigate(Routes.CHALLAN_STACK, { screen: Routes.CHALLAN_PAYMENT_SUCCESS });
+
+            }, 1500);
+          }}
+        />
       </View>
-
-      {/* ===== CTA ===== */}
-      <TouchableOpacity
-        disabled={!hasSufficientBalance}
-        style={[
-          styles.payButton,
-          !hasSufficientBalance && styles.payButtonDisabled,
-        ]}
-      >
-        <Text style={styles.payButtonText}>Proceed to Pay</Text>
-      </TouchableOpacity>
-
-      <Text style={styles.pinHint}>
-        You will be prompted for your 4-digit PIN
-      </Text>
     </ScreenContainer>
   );
 }
@@ -129,6 +166,10 @@ function Row({
 /* ========================= */
 
 const styles = StyleSheet.create({
+  container: {
+    padding: vw(5),
+    paddingBottom: vh(14),
+  },
   sectionTitle: {
     fontSize: 18,
     fontFamily: Fonts.bold,

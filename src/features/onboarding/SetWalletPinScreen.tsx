@@ -65,7 +65,11 @@ export default function SetWalletPinScreen({ navigation }: Props) {
                 <TouchableOpacity
                     activeOpacity={1}
                     style={styles.pinRow}
-                    onPress={() => inputRef.current?.focus()}
+                    onPress={() => {
+                        setTimeout(() => {
+                            inputRef.current?.focus();
+                        }, 100);
+                    }}
                 >
                     {[0, 1, 2, 3].map(i => (
                         <View key={i} style={styles.pinBox}>
@@ -77,15 +81,20 @@ export default function SetWalletPinScreen({ navigation }: Props) {
                 </TouchableOpacity>
 
 
-                <TextInput
-                    ref={inputRef}
-                    value={pin}
-                    onChangeText={onChangePin}
-                    keyboardType="number-pad"
-                    maxLength={4}
-                    autoFocus
-                    style={styles.hiddenInput}
-                />
+                <View style={styles.inputWrapper}>
+                    <TextInput
+                        ref={inputRef}
+                        value={pin}
+                        onChangeText={onChangePin}
+                        keyboardType="number-pad"
+                        maxLength={4}
+                        autoFocus={false}
+                        caretHidden
+                        showSoftInputOnFocus={true}
+                        style={styles.realHiddenInput}
+                    />
+                </View>
+
 
 
                 <TouchableOpacity
@@ -100,9 +109,9 @@ export default function SetWalletPinScreen({ navigation }: Props) {
                         Confirm PIN
                     </AppText>
                 </TouchableOpacity>
-               
+
             </View>
-             <CustomLoader visible={isLoading || loading} />
+            <CustomLoader visible={isLoading || loading} />
         </ScreenContainer>
     );
 }
@@ -131,7 +140,7 @@ const styles = StyleSheet.create({
         marginTop: vh(6),
         flexDirection: 'row',
         justifyContent: 'center',
-        zIndex:1
+        zIndex: 1
     },
 
     pinBox: {
@@ -151,7 +160,10 @@ const styles = StyleSheet.create({
 
     hiddenInput: {
         position: 'absolute',
-        opacity: 0,
+        width: 1,
+        height: 1,
+        left: -100,
+        top: -100,
     },
 
     cta: {
@@ -172,4 +184,17 @@ const styles = StyleSheet.create({
         fontSize: vw(4),
         fontFamily: Fonts.semiBold,
     },
+    inputWrapper: {
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+    },
+
+    realHiddenInput: {
+        width: '100%',
+        // height: '100%',
+        opacity: 0.01,  // NOT 0
+        zIndex:1
+    },
+
 });

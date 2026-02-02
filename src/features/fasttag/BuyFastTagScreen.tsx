@@ -15,6 +15,7 @@ import { Routes } from '../../app/constants/routes';
 import { FastTagStackParamList } from '../../app/navigation/types';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
+import { BBPS_LOG } from '../../assets/icons';
 
 const BANKS = [
   'IDFC First Bank',
@@ -30,7 +31,11 @@ export default function BuyFastTagScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<FastTagStackParamList>>();
   return (
     <ScreenContainer>
-      <CustomTopBar title='Buy New FastTag'/>
+      <CustomTopBar title='Buy New FastTag'
+        onBack={() => { navigation.goBack() }}
+        icon={<BBPS_LOG width={vw(20)} height={vw(20)} />}
+        canShowIcon
+      />
       <View style={styles.container}>
 
         {/* Header Text */}
@@ -47,7 +52,7 @@ export default function BuyFastTagScreen() {
           keyExtractor={item => item}
           contentContainerStyle={{ paddingTop: vh(2) }}
           renderItem={({ item }) => (
-            <TouchableOpacity style={styles.bankCard} onPress={()=>{
+            <TouchableOpacity style={styles.bankCard} onPress={() => {
               navigation.navigate(Routes.FASTTAG_BUY_NEW_FASTTAG)
             }}>
               <View style={styles.bankIcon}>

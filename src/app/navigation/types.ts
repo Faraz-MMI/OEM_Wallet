@@ -4,6 +4,7 @@ import { VoucherBrand } from "../../features/voucher/types";
 
 
 export type AuthStackParamList = {
+  [Routes.SPLASH]: undefined;
   [Routes.LOGIN]: undefined;
   [Routes.ONBOARDING]: undefined;
   [Routes.SET_PASSWORD]: {
@@ -94,7 +95,9 @@ export type ProfileStackParamList = {
 
 export type ChallanStackParamList = {
   [Routes.TRAFFIC_CHALLAN]: undefined;
-  [Routes.CHALLAN_DETAILS]: undefined;
+  [Routes.CHALLAN_DETAILS]: {
+    status: string;
+  };
   [Routes.CONFIRM_CHALLAN_PAYMENT]: undefined;
   [Routes.CHALLAN_PAYMENT_SUCCESS]: undefined;
 };

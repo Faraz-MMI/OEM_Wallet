@@ -10,12 +10,21 @@ import ScreenContainer from '../../ui/components/ScreenContainer';
 import { vw, vh, FONT_SIZE } from '../../ui/theme/dimensions';
 import { Fonts } from '../../ui/theme/fonts';
 import { COLORS } from '../../app/constants/colors';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { ChallanStackParamList, MainStack } from '../../app/navigation/types';
+import { Routes } from '../../app/constants/routes';
+import CustomTopBar from '../../ui/components/CustomTopBar';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
+type ChallanDetailsRouteProp = RouteProp<ChallanStackParamList, typeof Routes.CHALLAN_DETAILS>;
 export default function ChallanDetailsScreen() {
-  const status: 'PAID' | 'UNPAID' = 'UNPAID';
+  const route = useRoute<ChallanDetailsRouteProp>();
+  const { status } = route.params;
+  const navigation = useNavigation<NativeStackNavigationProp<MainStack>>();
 
   return (
     <ScreenContainer>
+      <CustomTopBar title="Challan Details" onBack={() => { navigation.goBack(); }} />
       <View style={{ flex: 1 }}>
         <ScrollView
           contentContainerStyle={styles.container}
@@ -34,7 +43,17 @@ export default function ChallanDetailsScreen() {
                 </Text>
               </View>
             </View>
-          ) : null}
+          ) : <View style={[styles.unpaidBanner, { borderColor: '#B9F8CF', backgroundColor: '#F0FDF4', }]}>
+            <View style={[styles.unpaidIcon,{backgroundColor:'#DCFCE7'}]}>
+              <Text style={styles.iconText}>📄</Text>
+            </View>
+            <View>
+              <Text style={[styles.unpaidTitle, { color: '#0D542B' }]}>Status: Paid</Text>
+              <Text style={[styles.unpaidSubtitle, { color: '#008236' }]}>
+                This challan has been cleared
+              </Text>
+            </View>
+          </View>}
 
           {/* AMOUNT CARD */}
           <View style={styles.amountCard}>
@@ -81,7 +100,7 @@ export default function ChallanDetailsScreen() {
         {/* PAY BUTTON */}
         {status === 'UNPAID' && (
           <View style={styles.bottomBar}>
-            <TouchableOpacity style={styles.payButton}>
+            <TouchableOpacity style={styles.payButton} onPress={()=>{navigation.navigate(Routes.CHALLAN_STACK,{screen:Routes.CONFIRM_CHALLAN_PAYMENT});}}>
               <Text style={styles.payButtonText}>
                 Pay ₹1,000 via FastTag
               </Text>
@@ -114,7 +133,7 @@ const styles = StyleSheet.create({
     padding: vw(4),
     borderRadius: 14,
     borderWidth: 1,
-    borderColor: '#FECACA',
+    borderColor: '#FFC9C9',
     marginBottom: vh(3),
   },
 
@@ -122,7 +141,7 @@ const styles = StyleSheet.create({
     width: vw(10),
     height: vw(10),
     borderRadius: vw(5),
-    backgroundColor: '#EF4444',
+    backgroundColor: '#FFE2E2',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: vw(3),

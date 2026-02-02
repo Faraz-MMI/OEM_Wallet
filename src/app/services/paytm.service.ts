@@ -1,9 +1,13 @@
 import AllInOneSDKManager from 'paytmpayments-allinone-react-native';
+// import { createPaytmOrder } from '../../core/api/payments.api';
+// import { useUserStore } from '../store/userStore';
 
 type StartPaytmTransactionParams = {
   amount: number;
-  customerId: string;
-  mobile: string;
+  orderId: string;
+  txnToken: string;
+  // customerId: string;
+  // mobile: string;
 };
 
 type PaytmResult = {
@@ -14,41 +18,49 @@ type PaytmResult = {
 };
 
 export const startPaytmTransaction = async (
-//   params: StartPaytmTransactionParams
+  params: StartPaytmTransactionParams
 ): Promise<PaytmResult> => {
   try {
+    // const user = useUserStore.getState().userProfile;
     // const order = await createPaytmOrder({
-    //   amount: params.amount.toFixed(2),
-    //   customerId: params.customerId,
-    //   mobile: params.mobile,
+    //   website: 'mapmyindia.com',
+    //   txnAmount: params.amount.toFixed(2),
+    //   userName: "OEM_" + user?.mobile || "",
+    //   firstName:user?.fname || "",
+    //   lastName:user?.lname || "",
+    //   mobile: user?.mobile || "",
     // });
 
     const result = await AllInOneSDKManager.startTransaction(
-        "123455665454",
+      params.orderId,
       "CEINFO77819068383010",
-      "token",
-      "1.0",
-      "https://domain.com",
+      params.txnToken,
+      params.amount.toFixed(2),
+      "mapmyindia.com",
       false,
       false,
       ""
     );
 
+    console.log("paytm transaction status", result);
     if (result?.STATUS === 'TXN_SUCCESS') {
       return {
         success: true,
-        orderId: "order.orderId",
+        orderId: result?.ORDERID,
         txnId: result.TXNID,
       };
     }
+
+    console.log("paytm transaction failed", result);
+
 
     return {
       success: false,
       message: result?.RESPMSG || 'Transaction failed',
     };
   } catch (err: any) {
-    console.log("error paytm:",err);
-    
+    console.log("error paytm:", err);
+
     return {
       success: false,
       message: err?.message || 'Payment cancelled',

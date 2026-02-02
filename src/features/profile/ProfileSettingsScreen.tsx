@@ -11,22 +11,22 @@ import { vw, vh } from '../../ui/theme/dimensions';
 import { Fonts } from '../../ui/theme/fonts';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { ProfileStackParamList } from '../../app/navigation/types';
+import { MainStack, ProfileStackParamList } from '../../app/navigation/types';
 import { Routes } from '../../app/constants/routes';
 import CustomTopBar from '../../ui/components/CustomTopBar';
 import ScreenContainer from '../../ui/components/ScreenContainer';
-import { ICON_BOTTOM_ANGLE_ARROW } from '../../assets/icons';
+import { ICON_BOTTOM_ANGLE_ARROW, ICON_RIGHT_ANGLE_ARROW } from '../../assets/icons';
 import { OEM_LIST } from '../../app/constants/brands';
 import { useUserStore } from '../../app/store/userStore';
 
 export default function ProfileSettingsScreen() {
-    const {profile,entityId, setBrand, selectedBrand } = useUserStore();
-    const [brandingOpen, setBrandingOpen] = useState(true);
+    const { profile, entityId, setBrand, selectedBrand, userProfile } = useUserStore();
+    const [brandingOpen, setBrandingOpen] = useState(false);
     const [selectedOEM, setSelectedOEM] = useState('mmi');
-    const navigation = useNavigation<NativeStackNavigationProp<ProfileStackParamList>>();
+    const navigation = useNavigation<NativeStackNavigationProp<MainStack>>();
 
     console.log(profile);
-    
+
 
     const account =
         profile != null && profile.accounts != null && profile.accounts.length > 0 ? profile.accounts[0] : null;
@@ -54,6 +54,15 @@ export default function ProfileSettingsScreen() {
         );
     }
 
+    const getInitials = (firstName?: string, lastName?: string): string => {
+        if (!firstName && !lastName) return '';
+
+        const first = firstName?.trim().charAt(0) ?? '';
+        const last = lastName?.trim().charAt(0) ?? '';
+
+        return (first + last).toUpperCase();
+    };
+
 
     return (
         <ScreenContainer>
@@ -66,12 +75,12 @@ export default function ProfileSettingsScreen() {
 
                 <View style={styles.profileCard}>
                     <View style={styles.avatar}>
-                        <AppText style={styles.avatarText}>F</AppText>
+                        <AppText style={styles.avatarText}>{getInitials(userProfile?.fname, userProfile?.lname)}</AppText>
                     </View>
 
                     <View>
-                        <AppText style={styles.name}>{`${profile?.firstName} ${profile?.lastName}`}</AppText>
-                        <AppText style={styles.phone}>{`${profile?.mobile.countryCode} ${profile?.mobile.value}`}</AppText>
+                        <AppText style={styles.name}>{userProfile ? `${userProfile?.fname} ${userProfile?.lname}` : ''}</AppText>
+                        <AppText style={styles.phone}>91 {userProfile ? `${userProfile?.mobile}` : ''}</AppText>
                         <AppText style={styles.kyc}>KYC: Full</AppText>
                     </View>
                 </View>
@@ -81,7 +90,7 @@ export default function ProfileSettingsScreen() {
                     icon="👤"
                     title="My Profile"
                     subtitle="View & edit personal details"
-                    onPress={() => { navigation.navigate(Routes.PROFILE_EDIT); }}
+                    onPress={() => { navigation.navigate(Routes.PROFILE_STACK, { screen: Routes.PROFILE_EDIT }); }}
                 />
 
 
@@ -96,12 +105,12 @@ export default function ProfileSettingsScreen() {
                     <View style={{ flex: 1 }}>
                         <AppText style={styles.menuTitle}>Wallet Branding</AppText>
                         <AppText style={styles.menuSub}>
-                            Currently: MMI OEM Wallet
+                            Currently: {selectedBrand?.name || 'MMI OEM Wallet'}
                         </AppText>
                     </View>
 
                     <AppText style={styles.chevron}>
-                        {brandingOpen ? <ICON_BOTTOM_ANGLE_ARROW style={{ transform: [{ scaleY: -1 }] }} /> : <ICON_BOTTOM_ANGLE_ARROW />}
+                        {brandingOpen ? <ICON_BOTTOM_ANGLE_ARROW style={{}} /> : <ICON_RIGHT_ANGLE_ARROW />}
                     </AppText>
                 </TouchableOpacity>
 
@@ -155,27 +164,28 @@ export default function ProfileSettingsScreen() {
                     icon="💳"
                     title="Payment Methods"
                     subtitle="Manage cards & UPI"
-                    onPress={() => { navigation.navigate(Routes.PROFILE_PAYMENT_METHODS); }}
+                    onPress={() => { navigation.navigate(Routes.PROFILE_STACK, { screen: Routes.PROFILE_PAYMENT_METHODS }); }}
                 />
 
                 <MenuItem
                     icon="🔒"
                     title="Security & PIN"
                     subtitle="Change password & PIN"
-                    onPress={() => { navigation.navigate(Routes.PROFILE_WALLET_PIN); }}
+                    onPress={() => { navigation.navigate(Routes.PROFILE_STACK, { screen: Routes.PROFILE_WALLET_PIN }); }}
                 />
 
                 <MenuItem
                     icon="🚗"
                     title="My Vehicles"
                     subtitle="1 vehicle registered"
+                    onPress={() => { navigation.navigate(Routes.VEHICLE_STACK, { screen: Routes.VEHICLE_HOME }); }}
                 />
 
                 <MenuItem
                     icon="❓"
                     title="Help & Support"
                     subtitle="FAQs & contact us"
-                    onPress={() => { navigation.navigate(Routes.PROFILE_HELP); }}
+                    onPress={() => { navigation.navigate(Routes.PROFILE_STACK, { screen: Routes.PROFILE_HELP }); }}
                 />
 
 

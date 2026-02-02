@@ -15,6 +15,7 @@ import { FastTagStackParamList } from '../../app/navigation/types';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
 import { Routes } from '../../app/constants/routes';
+import { BBPS_LOG } from '../../assets/icons';
 
 const BANKS = [
   'IDFC First Bank',
@@ -28,10 +29,10 @@ const BANKS = [
 ];
 
 export default function SelectFastTagBankScreen() {
-    const navigation = useNavigation<NativeStackNavigationProp<FastTagStackParamList>>();
+  const navigation = useNavigation<NativeStackNavigationProp<FastTagStackParamList>>();
   return (
     <ScreenContainer>
-        <CustomTopBar title='Add Existing FastTag'/>
+      <CustomTopBar title='Add Existing FastTag' icon={<BBPS_LOG width={vw(20)} height={vw(20)} />} canShowIcon />
       <View style={styles.container}>
 
         {/* HEADER */}
@@ -47,8 +48,8 @@ export default function SelectFastTagBankScreen() {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingBottom: vh(3) }}
           renderItem={({ item }) => (
-            <TouchableOpacity style={styles.bankCard} onPress={()=>{
-                navigation.navigate(Routes.FASTTAG_ENTER_VEHICLE_NUMBER)
+            <TouchableOpacity style={styles.bankCard} onPress={() => {
+              navigation.navigate(Routes.FASTTAG_ENTER_VEHICLE_NUMBER)
             }}>
               <View style={styles.iconCircle}>
                 <Text style={styles.bankIcon}>🏦</Text>

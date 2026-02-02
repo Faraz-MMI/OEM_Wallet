@@ -20,6 +20,7 @@ import { useLoginUser } from '../onboarding/hooks/useLoginUser';
 import ScreenContainer from '../../ui/components/ScreenContainer';
 import CustomLoader from '../../ui/components/CustomLoader';
 import { useAuthStore } from '../../app/store/authStore';
+import ErrorPopup from '../../ui/components/ErrorPopup';
 type Props = NativeStackScreenProps<any>;
 
 type SetPasswordRouteProp = RouteProp<AuthStackParamList, typeof Routes.SET_PASSWORD>;
@@ -30,6 +31,8 @@ export default function SetPasswordScreen({ navigation }: Props) {
   const [confirm, setConfirm] = useState('');
   const [showPass, setShowPass] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('An error occurred during user creation or login.');
 
   const hasMin = password.length >= 8;
   const hasNumber = /\d/.test(password);
@@ -72,6 +75,10 @@ export default function SetPasswordScreen({ navigation }: Props) {
       } else {
         console.log('Login failed');
       }
+    }else{
+      setErrorMessage(error || 'User creation failed');
+      setShowError(true);
+      
     }
 
   }
@@ -93,6 +100,7 @@ export default function SetPasswordScreen({ navigation }: Props) {
               value={password}
               onChangeText={setPassword}
               placeholder="Enter password"
+              placeholderTextColor={"#717182"}
               secureTextEntry={!showPass}
               style={styles.input}
             />
@@ -109,6 +117,7 @@ export default function SetPasswordScreen({ navigation }: Props) {
               value={confirm}
               onChangeText={setConfirm}
               placeholder="Re-enter password"
+              placeholderTextColor={"#717182"}
               secureTextEntry={!showConfirm}
               style={styles.input}
             />
@@ -149,6 +158,13 @@ export default function SetPasswordScreen({ navigation }: Props) {
           You can reset your password later from Settings
         </AppText>
       </View>
+      <ErrorPopup visible={showError}
+        title="Create User Failed"
+        message={error || loginError || 'An error occurred'}
+        primaryText="OK"
+        canShowPrimary={true}
+        onPrimary={() => setShowError(false)}
+      />
       <CustomLoader visible={loading || loginLoading}/>
     </ScreenContainer>
   );
@@ -214,6 +230,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: vw(3.6),
     fontFamily: Fonts.regular,
+    color: COLORS.BLACK,
   },
 
   eye: {

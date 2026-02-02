@@ -10,6 +10,7 @@ import { FastTagStackParamList } from '../../app/navigation/types';
 import { Routes } from '../../app/constants/routes';
 import ScreenContainer from '../../ui/components/ScreenContainer';
 import CustomTopBar from '../../ui/components/CustomTopBar';
+import { BBPS_LOG } from '../../assets/icons';
 
 type Props = {
     onConfirm: () => void;
@@ -21,9 +22,11 @@ export default function ReviewPaymentScreen() {
     const [loading, setLoading] = useState(false);
     return (
         <ScreenContainer>
-            <CustomTopBar title='Review Payment' onBack={()=>navigation.goBack()}/>
+            <CustomTopBar title='Review Payment' onBack={() => navigation.goBack()}
+                icon={<BBPS_LOG width={vw(20)} height={vw(20)} />}
+                canShowIcon />
             <View style={styles.container}>
-                
+
                 <View style={styles.card}>
                     <InfoRow label="Vehicle Number" value="DL 20 FRZ 0899" />
 
@@ -43,12 +46,12 @@ export default function ReviewPaymentScreen() {
                     />
                 </View>
 
-                
+
                 <TouchableOpacity style={styles.cta} onPress={() => setShowPin(true)}>
                     <AppText style={styles.ctaText}>Confirm & Pay</AppText>
                 </TouchableOpacity>
 
-                
+
                 <AppText style={styles.hint}>
                     You will be asked to enter your 4-digit PIN
                 </AppText>

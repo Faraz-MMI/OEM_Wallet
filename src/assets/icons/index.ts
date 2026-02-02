@@ -26,6 +26,14 @@ import ICON_NOTES from './icon_notes.svg';
 import ICON_PLUS from './icon_plus.svg';
 import ICON_EYE from './eye.svg';
 import ICON_EYE_OFF from './eye_off.svg';
+import ICON_EMAIL from './icon_email.svg';
+import ICON_PHONE from './icon_phone.svg';
+import ICON_CHAT from './icon_chat.svg';
+import ICON_QUESTIONMARK_CIRCLE from './icon_question_mark_circle.svg';
+import ICON_EXCLAM_CIRCLE from './icon_exclam_circle.svg';
+import BBPS_LOG from '../bbps_logo.svg';
+import BBPS_SHORT_LOGO from '../bbps_short_logo.svg';
+import ICON_CARD from './icon_card.svg';
 
 
 export {
@@ -56,5 +64,13 @@ export {
     ICON_NOTES,
     ICON_PLUS,
     ICON_EYE,
-    ICON_EYE_OFF
+    ICON_EYE_OFF,
+    ICON_EMAIL,
+    ICON_PHONE,
+    ICON_CHAT,
+    ICON_QUESTIONMARK_CIRCLE,
+    ICON_EXCLAM_CIRCLE,
+    BBPS_LOG,
+    BBPS_SHORT_LOGO,
+    ICON_CARD
 };

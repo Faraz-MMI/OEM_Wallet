@@ -22,6 +22,8 @@ export const useLoginUser = (): UseLoginReturn => {
       const response = await loginApi(payload);
 
       if (!response.status) {
+        
+        return response;
         throw new Error(response.message || 'Login failed');
       }
 

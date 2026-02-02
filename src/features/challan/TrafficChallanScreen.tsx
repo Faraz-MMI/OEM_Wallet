@@ -10,10 +10,18 @@ import ScreenContainer from '../../ui/components/ScreenContainer';
 import { vw, vh, FONT_SIZE } from '../../ui/theme/dimensions';
 import { Fonts } from '../../ui/theme/fonts';
 import { COLORS } from '../../app/constants/colors';
+import CustomTopBar from '../../ui/components/CustomTopBar';
+import { MainStack } from '../../app/navigation/types';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useNavigation } from '@react-navigation/native';
+import { Routes } from '../../app/constants/routes';
+import { CheckCircle, ICON_EXCLAM_CIRCLE } from '../../assets/icons';
 
 export default function TrafficChallansScreen() {
+  const navigation = useNavigation<NativeStackNavigationProp<MainStack>>();
   return (
     <ScreenContainer>
+      <CustomTopBar title="Traffic Challans" onBack={() => { navigation.goBack(); }} />
       <ScrollView
         contentContainerStyle={styles.container}
         showsVerticalScrollIndicator={false}
@@ -40,8 +48,10 @@ export default function TrafficChallansScreen() {
           </Text>
         </View>
 
-        {/* UNPAID */}
-        <Text style={styles.sectionTitle}>❗ Unpaid Challans</Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: vh(3) }}>
+          <ICON_EXCLAM_CIRCLE width={vw(6)} height={vw(6)} style={{ marginRight: vw(2), marginTop: vh(3) }} />
+          <Text style={styles.sectionTitle}> Unpaid Challans</Text>
+        </View>
 
         <ChallanCard
           title="Overspeeding"
@@ -49,6 +59,7 @@ export default function TrafficChallansScreen() {
           date="14 Dec 2024"
           amount="₹1,000"
           status="UNPAID"
+          onPress={() => { navigation.navigate(Routes.CHALLAN_STACK, { screen: Routes.CHALLAN_DETAILS, params: { status: "UNPAID" } }); }}
         />
 
         <ChallanCard
@@ -59,10 +70,13 @@ export default function TrafficChallansScreen() {
           status="UNPAID"
         />
 
-        {/* PAID */}
-        <Text style={[styles.sectionTitle, { marginTop: vh(3) }]}>
-          ✅ Paid Challans
-        </Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <CheckCircle width={vw(6)} height={vw(6)} style={{ marginRight: vw(2), marginTop: vh(3) }} />
+          <Text style={[styles.sectionTitle, { marginTop: vh(3) }]}>
+            Paid Challans
+          </Text>
+        </View>
+
 
         <ChallanCard
           title="Parking Violation"
@@ -70,6 +84,7 @@ export default function TrafficChallansScreen() {
           date="28 Nov 2024"
           amount="₹200"
           status="PAID"
+          onPress={() => { navigation.navigate(Routes.CHALLAN_STACK, { screen: Routes.CHALLAN_DETAILS, params: { status: "PAID" } }); }}
         />
 
         <ChallanCard
@@ -91,6 +106,7 @@ type ChallanProps = {
   date: string;
   amount: string;
   status: 'PAID' | 'UNPAID';
+  onPress?: () => void;
 };
 
 const ChallanCard = ({
@@ -99,15 +115,17 @@ const ChallanCard = ({
   date,
   amount,
   status,
+  onPress
 }: ChallanProps) => {
   const isPaid = status === 'PAID';
 
   return (
-    <View
+    <TouchableOpacity
       style={[
         styles.challanCard,
         isPaid ? styles.paidBorder : styles.unpaidBorder,
       ]}
+      onPress={onPress}
     >
       <View style={styles.challanHeader}>
         <Text style={styles.challanTitle}>{title}</Text>
@@ -142,7 +160,7 @@ const ChallanCard = ({
           {amount}
         </Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

@@ -11,6 +11,7 @@ import { vw, vh, FONT_SIZE } from '../../ui/theme/dimensions';
 import { Fonts } from '../../ui/theme/fonts';
 import { COLORS } from '../../app/constants/colors';
 import { Routes } from '../../app/constants/routes';
+import { BBPS_SHORT_LOGO } from '../../assets/icons';
 
 export default function FastTagLinkedSuccessScreen({ navigation }: any) {
     return (
@@ -20,7 +21,7 @@ export default function FastTagLinkedSuccessScreen({ navigation }: any) {
 
                     {/* SUCCESS ICON */}
                     <View style={styles.successIconWrap}>
-                        <Text style={styles.successIcon}>✓</Text>
+                        <BBPS_SHORT_LOGO />
                     </View>
 
                     {/* TITLE */}
@@ -117,8 +118,7 @@ const styles = StyleSheet.create({
     successIconWrap: {
         width: vw(20),
         height: vw(20),
-        borderRadius: vw(10),
-        backgroundColor: '#16A34A',
+        
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: vh(6),

@@ -1,4 +1,5 @@
 export enum Routes {
+  SPLASH = "Splash",
   LOGIN = "Login",
   ONBOARDING = 'Onboarding',
   VERIFY_OTP="VerifyOTP",

@@ -8,77 +8,86 @@ import {
 import ScreenContainer from '../../ui/components/ScreenContainer';
 import { COLORS } from '../../app/constants/colors';
 import { Fonts } from '../../ui/theme/fonts';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useNavigation } from '@react-navigation/native';
+import { MainStack } from '../../app/navigation/types';
+import { Routes } from '../../app/constants/routes';
+import { vh, vw } from '../../ui/theme/dimensions';
 
-export default function ChallanPaymentSuccessScreen({ navigation }: any) {
+export default function ChallanPaymentSuccessScreen() {
+  const navigation = useNavigation<NativeStackNavigationProp<MainStack>>();
   return (
     <ScreenContainer>
-      {/* ===== Success Icon ===== */}
-      <View style={styles.iconWrap}>
-        <View style={styles.successIcon}>
-          <Text style={styles.check}>✓</Text>
-        </View>
-      </View>
-
-      {/* ===== Title ===== */}
-      <Text style={styles.title}>
-        Challan Paid Successfully <Text style={styles.tick}>✅</Text>
-      </Text>
-
-      <Text style={styles.subtitle}>
-        Your traffic challan has been cleared
-      </Text>
-
-      {/* ===== Summary Card ===== */}
-      <View style={styles.card}>
-        <Text style={styles.amountLabel}>Amount Paid</Text>
-        <Text style={styles.amount}>₹1,000</Text>
-        <Text style={styles.paymentSource}>Paid via FastTag Wallet</Text>
-
-        {/* Divider */}
-        <View style={styles.divider} />
-
-        {/* Offence */}
-        <View style={styles.row}>
-          <Text style={styles.label}>Offence</Text>
-          <Text style={styles.value}>Overspeeding</Text>
+      <View style={{
+        flex: 1, padding: vw(5),
+        paddingBottom: vh(14),
+      }}>
+        <View style={styles.iconWrap}>
+          <View style={styles.successIcon}>
+            <Text style={styles.check}>✓</Text>
+          </View>
         </View>
 
-        <View style={styles.row}>
-          <Text style={styles.label}>Challan ID</Text>
-          <Text style={styles.value}>CHLN202412001</Text>
+        {/* ===== Title ===== */}
+        <Text style={styles.title}>
+          Challan Paid Successfully <Text style={styles.tick}>✅</Text>
+        </Text>
+
+        <Text style={styles.subtitle}>
+          Your traffic challan has been cleared
+        </Text>
+
+        {/* ===== Summary Card ===== */}
+        <View style={styles.card}>
+          <Text style={styles.amountLabel}>Amount Paid</Text>
+          <Text style={styles.amount}>₹1,000</Text>
+          <Text style={styles.paymentSource}>Paid via FastTag Wallet</Text>
+
+          {/* Divider */}
+          <View style={styles.divider} />
+
+          {/* Offence */}
+          <View style={styles.row}>
+            <Text style={styles.label}>Offence</Text>
+            <Text style={styles.value}>Overspeeding</Text>
+          </View>
+
+          <View style={styles.row}>
+            <Text style={styles.label}>Challan ID</Text>
+            <Text style={styles.value}>CHLN202412001</Text>
+          </View>
+
+          <View style={styles.row}>
+            <Text style={styles.label}>Vehicle</Text>
+            <Text style={styles.value}>MH12AB1234</Text>
+          </View>
+
+          {/* Transaction ID */}
+          <View style={styles.txnBox}>
+            <Text style={styles.txnLabel}>Transaction ID</Text>
+            <Text style={styles.txnValue}>TXN1768573257832</Text>
+          </View>
+
+          {/* Download */}
+          <TouchableOpacity style={styles.downloadBtn}>
+            <Text style={styles.downloadText}>⬇ Download Receipt</Text>
+          </TouchableOpacity>
         </View>
 
-        <View style={styles.row}>
-          <Text style={styles.label}>Vehicle</Text>
-          <Text style={styles.value}>MH12AB1234</Text>
-        </View>
+        <TouchableOpacity
+          style={styles.primaryBtn}
+          onPress={() => navigation.replace(Routes.FASTTAG_STACK, { screen: Routes.FASTTAG_HOME })}
+        >
+          <Text style={styles.primaryText}>Back to FastTag</Text>
+        </TouchableOpacity>
 
-        {/* Transaction ID */}
-        <View style={styles.txnBox}>
-          <Text style={styles.txnLabel}>Transaction ID</Text>
-          <Text style={styles.txnValue}>TXN1768573257832</Text>
-        </View>
-
-        {/* Download */}
-        <TouchableOpacity style={styles.downloadBtn}>
-          <Text style={styles.downloadText}>⬇ Download Receipt</Text>
+        <TouchableOpacity
+          style={styles.secondaryBtn}
+          onPress={() => navigation.reset({ index: 0, routes: [{ name: Routes.DASHBOARD }] })}
+        >
+          <Text style={styles.secondaryText}>Go to Home</Text>
         </TouchableOpacity>
       </View>
-
-      {/* ===== Actions ===== */}
-      <TouchableOpacity
-        style={styles.primaryBtn}
-        onPress={() => navigation.navigate('FastTag')}
-      >
-        <Text style={styles.primaryText}>Back to FastTag</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={styles.secondaryBtn}
-        onPress={() => navigation.navigate('Home')}
-      >
-        <Text style={styles.secondaryText}>Go to Home</Text>
-      </TouchableOpacity>
     </ScreenContainer>
   );
 }

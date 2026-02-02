@@ -21,7 +21,8 @@ export const useCreateUser = (): UseCreateUserReturn => {
         const response = await createUserApi(payload);
 
         if (!response.status) {
-          throw new Error(response.message || 'User creation failed');
+          setError(response.message || 'User creation failed');
+          return false;
         }
 
         return true;

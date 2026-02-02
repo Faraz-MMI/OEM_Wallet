@@ -3,7 +3,7 @@ import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import AppText from '../../ui/components/AppText';
 import { Fonts } from '../../ui/theme/fonts';
 import { vw, vh, FONT_SIZE } from '../../ui/theme/dimensions';
-import { CheckCircle } from '../../assets/icons';
+import { BBPS_SHORT_LOGO, CheckCircle } from '../../assets/icons';
 import { FastTagStackParamList, MainStack } from '../../app/navigation/types';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
@@ -31,13 +31,13 @@ export default function FastTagRechargeSuccessScreen() {
         <ScreenContainer>
             <View style={styles.container}>
                 <View style={styles.center}>
-                    <CheckCircle width={64} height={64} color="#22C55E" />
+                    <BBPS_SHORT_LOGO />
 
                     <AppText style={styles.title}>
-                        FastTag Recharge 
+                        Recharge Successful
                     </AppText>
-                    <AppText style={[styles.title,{marginTop:0}]}>
-                        Successful ✅
+                    <AppText style={[styles.subTitle]}>
+                        ₹500 added to your FastTag
                     </AppText>
 
                     <View style={styles.card}>
@@ -54,7 +54,7 @@ export default function FastTagRechargeSuccessScreen() {
                     </View>
                 </View>
 
-                
+
                 <TouchableOpacity
                     style={styles.secondaryBtn}
                     onPress={() => { navigation.navigate(Routes.FASTTAG_STACK, { screen: Routes.FASTTAG_PAYMENT_HISTORY }) }}
@@ -98,6 +98,13 @@ const styles = StyleSheet.create({
         fontFamily: Fonts.bold,
         textAlign: 'center',
     },
+    subTitle:{
+        marginTop: vh(0.5),
+        fontSize: FONT_SIZE.FONT_18,
+        fontFamily: Fonts.regular,
+        color: '#4A5565',
+        textAlign: 'center',
+    },
 
     /* Card */
     card: {
@@ -111,14 +118,14 @@ const styles = StyleSheet.create({
     },
 
     row: {
-        flexDirection:'row',
-        justifyContent:'space-between',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
         marginBottom: vh(1.8),
     },
 
     label: {
         fontSize: FONT_SIZE.FONT_14,
-        lineHeight:20,
+        lineHeight: 20,
         color: '#6B7280',
     },
 
